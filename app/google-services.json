@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "69081388192",
+    "project_id": "sellsumm-f5944",
+    "storage_bucket": "sellsumm-f5944.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69081388192:android:0d57093cc060e52c46a5c5",
+        "android_client_info": {
+          "package_name": "com.example.sellsumm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_n_ehyDmo7viD853iQ-dMoFRnTwUxIIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
