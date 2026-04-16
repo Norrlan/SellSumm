@@ -10,173 +10,137 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="416dp"
-        android:layout_height="226dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.625"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/store_background"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/store_background" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="156dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="24dp"
-        android:text="SellSumm"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="8pt"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
-
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="341dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="28dp"
-        android:text="Flexible Retail Tracking System"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="8pt"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-        app:layout_constraintEnd_toEndOf="@+id/imageView6"
-        app:layout_constraintHorizontal_bias="0.942"
-        app:layout_constraintStart_toStartOf="@+id/imageView6" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageView8"
-        android:layout_width="91dp"
-        android:layout_height="87dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageView6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@id/imageView6"
+        app:layout_constraintVertical_bias="0.16"
         app:srcCompat="@drawable/sellsumm_logo" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="412dp"
-        android:layout_height="354dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="76dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="SellSumm"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Flexible Retail Tracking System"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/formContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6">
 
         <TextView
-            android:id="@+id/regsiter_mail2"
-            android:layout_width="75dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="52dp"
+            android:id="@+id/emailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="EMAIL"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/PwdField"
-            android:layout_width="311dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="56dp"
+            android:id="@+id/emailField"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:background="@drawable/bg_input_field"
-            android:hint="Enter your password"
-            android:inputType="textEmailAddress"
+            android:hint="Enter your email address"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.319"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailField" />
+            app:layout_constraintTop_toBottomOf="@id/emailLabel" />
 
         <TextView
-            android:id="@+id/textView4"
-            android:layout_width="100dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="165dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="158dp"
-            android:text="Login"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="10pt"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.733"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/Regsiter_pwd"
-            android:layout_width="83dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="160dp"
+            android:id="@+id/passwordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="PASSWORD"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/emailField" />
 
         <EditText
-            android:id="@+id/emailField"
-            android:layout_width="312dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="40dp"
+            android:id="@+id/PwdField"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
             android:background="@drawable/bg_input_field"
-            android:hint="Enter your email address"
-            android:inputType="textEmailAddress"
+            android:hint="Enter your password"
+            android:inputType="textPassword"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.32"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@id/passwordLabel" />
 
         <TextView
-            android:id="@+id/Regsiter_mail"
-            android:layout_width="60dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="28dp"
+            android:id="@+id/roleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="ROLE"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/PwdField" />
+            app:layout_constraintTop_toBottomOf="@id/PwdField" />
 
         <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="406dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="56dp"
-            android:layout_marginEnd="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:id="@+id/spinner2"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background= "#e0e0e0"
+            app:layout_constraintTop_toBottomOf="@id/roleLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/PwdField" />
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/Registerlink"
         android:layout_width="111dp"
         android:layout_height="17dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
         android:text="Create Account"
         android:textColor="@color/teal"
         app:layout_constraintBottom_toTopOf="@+id/forgotten_Pwd"
@@ -186,10 +150,12 @@
         android:id="@+id/button3"
         android:layout_width="118dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="147dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="52dp"
         android:backgroundTint="@color/teal"
-        android:text="Sign Up"
+        android:gravity="center_horizontal"
+        android:text="Sign In"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/loginText"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -197,8 +163,8 @@
         android:id="@+id/loginText"
         android:layout_width="146dp"
         android:layout_height="21dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="100dp"
         android:text="Dont have an account?"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -207,14 +173,11 @@
         android:id="@+id/forgotten_Pwd"
         android:layout_width="139dp"
         android:layout_height="20dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="48dp"
         android:text="Forgotten password"
         android:textColor="@color/teal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.724"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.sellsumm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +16,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        // Start the app from Register Screen
+        startActivity(new Intent(this, RegisterScreen.class));
+        finish();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 

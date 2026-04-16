@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,8 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterScreen extends AppCompatActivity
-{
+public class RegisterScreen extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -31,6 +31,7 @@ public class RegisterScreen extends AppCompatActivity
     private EditText emailField, fullNameField, passwordField;
     private Spinner roleSpinner;
     private Button signUpBtn;
+    private TextView loginLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,7 @@ public class RegisterScreen extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) ->
-        {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -53,29 +53,37 @@ public class RegisterScreen extends AppCompatActivity
         fullNameField = findViewById(R.id.fullnameField);
         passwordField = findViewById(R.id.PwdField);
         roleSpinner = findViewById(R.id.spinner);
-        signUpBtn = findViewById(R.id.button3);
+        signUpBtn = findViewById(R.id.sign_Up);
+        loginLink = findViewById(R.id.loginlink);
 
-        // Populate role dropdown
+        Spinner spinner = findViewById(R.id.spinner);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_dropdown_item,
+                R.layout.spinner_text,
                 new String[]{"staff", "supervisor"}
         );
-        roleSpinner.setAdapter(adapter);
+
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        spinner.setAdapter(adapter);
+
 
         // Register button click
         signUpBtn.setOnClickListener(v -> attemptRegistration());
+
+        // Login hyperlink
+        loginLink.setOnClickListener(v ->
+                startActivity(new Intent(RegisterScreen.this, LoginScreen.class))
+        );
     }
 
-    private void attemptRegistration()
-    {
+    private void attemptRegistration() {
         String email = emailField.getText().toString().trim();
         String fullName = fullNameField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
         String role = roleSpinner.getSelectedItem().toString();
 
-        if (email.isEmpty() || fullName.isEmpty() || password.isEmpty())
-        {
+        if (email.isEmpty() || fullName.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -88,21 +96,17 @@ public class RegisterScreen extends AppCompatActivity
         registerUser(email, password, fullName, role);
     }
 
-    private void registerUser(String email, String password, String fullName, String role)
-    {
+    private void registerUser(String email, String password, String fullName, String role) {
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult ->
-                {
+                .addOnSuccessListener(authResult -> {
                     FirebaseUser user = mAuth.getCurrentUser();
-                    if (user == null)
-                    {
+                    if (user == null) {
                         Toast.makeText(this, "Unexpected error", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     String uid = user.getUid();
 
-                    // Build Firestore profile
                     Map<String, Object> profile = new HashMap<>();
                     profile.put("email", email);
                     profile.put("fullName", fullName);
@@ -111,8 +115,7 @@ public class RegisterScreen extends AppCompatActivity
 
                     db.collection("users").document(uid)
                             .set(profile)
-                            .addOnSuccessListener(aVoid ->
-                            {
+                            .addOnSuccessListener(aVoid -> {
                                 user.sendEmailVerification();
                                 Toast.makeText(this, "Account created. Verify your email.", Toast.LENGTH_LONG).show();
 

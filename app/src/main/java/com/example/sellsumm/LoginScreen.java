@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +30,8 @@ public class LoginScreen extends AppCompatActivity {
     private View loginButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_screen);
@@ -35,11 +39,13 @@ public class LoginScreen extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) ->
+        {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
         // Bind XML fields
         emailField = findViewById(R.id.emailField);
@@ -47,6 +53,18 @@ public class LoginScreen extends AppCompatActivity {
         registerLink = findViewById(R.id.Registerlink);
         forgottenPwd = findViewById(R.id.forgotten_Pwd);
         loginButton = findViewById(R.id.button3);
+
+        Spinner spinner = findViewById(R.id.spinner2);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                R.layout.spinner_text,
+                new String[]{"staff", "supervisor"}
+        );
+
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        spinner.setAdapter(adapter);
+
 
         // Create Account link
         registerLink.setOnClickListener(v -> {
@@ -63,7 +81,8 @@ public class LoginScreen extends AppCompatActivity {
 
         // Auto-login if already authenticated + verified
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null && currentUser.isEmailVerified()) {
+        if (currentUser != null && currentUser.isEmailVerified())
+        {
             fetchUserRoleAndNavigate(currentUser.getUid());
         }
     }
