@@ -116,10 +116,8 @@ public class RegisterScreen extends AppCompatActivity {
                     db.collection("users").document(uid)
                             .set(profile)
                             .addOnSuccessListener(aVoid -> {
-                                user.sendEmailVerification();
-                                Toast.makeText(this, "Account created. Verify your email.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(this, "Account created successfully", Toast.LENGTH_LONG).show();
 
-                                mAuth.signOut();
                                 startActivity(new Intent(this, LoginScreen.class));
                                 finish();
                             })
@@ -131,4 +129,5 @@ public class RegisterScreen extends AppCompatActivity {
                         Toast.makeText(this, "Registration failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
+
 }

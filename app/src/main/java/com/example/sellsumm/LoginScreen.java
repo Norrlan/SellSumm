@@ -159,12 +159,6 @@ public class LoginScreen extends AppCompatActivity {
                         return;
                     }
 
-                    if (!user.isEmailVerified()) {
-                        mAuth.signOut();
-                        Toast.makeText(this, "Verify your email first", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
                     // Email verified → fetch role
                     fetchUserRoleAndNavigate(user.getUid());
                 });
