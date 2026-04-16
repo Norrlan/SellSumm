@@ -2,7 +2,6 @@ package com.example.sellsumm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +47,6 @@ public class RegisterScreen extends AppCompatActivity {
             return insets;
         });
 
-        // Bind XML fields
         emailField = findViewById(R.id.emailField);
         fullNameField = findViewById(R.id.fullnameField);
         passwordField = findViewById(R.id.PwdField);
@@ -56,22 +54,17 @@ public class RegisterScreen extends AppCompatActivity {
         signUpBtn = findViewById(R.id.sign_Up);
         loginLink = findViewById(R.id.loginlink);
 
-        Spinner spinner = findViewById(R.id.spinner);
-
+        // Styled spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.spinner_text,
                 new String[]{"staff", "supervisor"}
         );
-
         adapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spinner.setAdapter(adapter);
+        roleSpinner.setAdapter(adapter);
 
-
-        // Register button click
         signUpBtn.setOnClickListener(v -> attemptRegistration());
 
-        // Login hyperlink
         loginLink.setOnClickListener(v ->
                 startActivity(new Intent(RegisterScreen.this, LoginScreen.class))
         );
@@ -116,10 +109,11 @@ public class RegisterScreen extends AppCompatActivity {
                     db.collection("users").document(uid)
                             .set(profile)
                             .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(this, "Account created successfully", Toast.LENGTH_LONG).show();
 
-                                startActivity(new Intent(this, LoginScreen.class));
-                                finish();
+                                // AUTO‑LOGIN AFTER REGISTRATION
+                                Toast.makeText(this, "Account created. Logging you in...", Toast.LENGTH_SHORT).show();
+
+                                loginUser(email, password);
                             })
                             .addOnFailureListener(e ->
                                     Toast.makeText(this, "Error saving profile: " + e.getMessage(), Toast.LENGTH_SHORT).show()
@@ -130,4 +124,38 @@ public class RegisterScreen extends AppCompatActivity {
                 );
     }
 
+    private void loginUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user == null) {
+                        Toast.makeText(this, "Unexpected error", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String uid = user.getUid();
+
+                    db.collection("users").document(uid).get()
+                            .addOnSuccessListener(doc -> {
+                                String role = doc.getString("role");
+
+                                if (role == null) {
+                                    Toast.makeText(this, "Role missing", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                if (role.equals("supervisor")) {
+                                    startActivity(new Intent(this, SupervisorMainActivity.class));
+                                } else {
+                                    startActivity(new Intent(this, StaffMainActivity.class));
+                                }
+
+                                finish();
+                            });
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Auto-login failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
 }

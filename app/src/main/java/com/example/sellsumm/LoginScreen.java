@@ -168,7 +168,8 @@ public class LoginScreen extends AppCompatActivity {
     private void fetchUserRoleAndNavigate(String uid) {
 
         db.collection("users").document(uid).get()
-                .addOnSuccessListener(doc -> {
+                .addOnSuccessListener(doc ->
+                {
 
                     if (!doc.exists()) {
                         Toast.makeText(this, "User profile missing", Toast.LENGTH_SHORT).show();
