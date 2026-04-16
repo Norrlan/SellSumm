@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SellSumm">
         <activity
+            android:name=".StaffMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SupervisorMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginScreen"
+            android:exported="false" />
+        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
