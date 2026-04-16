@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/kpiName"
+                android:layout_width="141dp"
+                android:layout_height="24sp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/kpiActual"
+                android:layout_width="104dp"
+                android:layout_height="20sp"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/kpiTarget"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_height="20sp"
+                android:layout_width="104dp"
+                />
+
+            <ProgressBar
+                android:id="@+id/kpiProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:max="100"
+                android:progressTint="@color/teal" />
+
+            <TextView
+                android:id="@+id/kpiStatus"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/teal"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_height="20sp"
+                android:layout_width="104dp"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
