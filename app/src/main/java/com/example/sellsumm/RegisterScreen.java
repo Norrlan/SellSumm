@@ -54,7 +54,7 @@ public class RegisterScreen extends AppCompatActivity {
         signUpBtn = findViewById(R.id.sign_Up);
         loginLink = findViewById(R.id.loginlink);
 
-        // Styled spinner
+        // Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.spinner_text,
@@ -106,11 +106,9 @@ public class RegisterScreen extends AppCompatActivity {
                     profile.put("role", role);
                     profile.put("uid", uid);
 
-                    db.collection("users").document(uid)
-                            .set(profile)
-                            .addOnSuccessListener(aVoid -> {
-
-                                // AUTO‑LOGIN AFTER REGISTRATION
+                    db.collection("users").document(uid).set(profile).addOnSuccessListener(aVoid ->
+                            {
+                                //auto login after registration
                                 Toast.makeText(this, "Account created. Logging you in...", Toast.LENGTH_SHORT).show();
 
                                 loginUser(email, password);

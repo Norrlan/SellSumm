@@ -7,11 +7,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class SupervisorMainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class SupervisorMainActivity extends AppCompatActivity
+{
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_supervisor_main);
@@ -21,4 +26,5 @@ public class SupervisorMainActivity extends AppCompatActivity {
             return insets;
         });
     }
+
 }
