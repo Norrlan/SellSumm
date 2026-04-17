@@ -134,8 +134,8 @@ public class RegisterScreen extends AppCompatActivity {
 
                     String uid = user.getUid();
 
-                    db.collection("users").document(uid).get()
-                            .addOnSuccessListener(doc -> {
+                    db.collection("users").document(uid).get().addOnSuccessListener(doc ->
+                    {
                                 String role = doc.getString("role");
 
                                 if (role == null) {
