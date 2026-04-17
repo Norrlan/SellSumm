@@ -21,7 +21,7 @@
         android:icon="@drawable/ic_white_inventory" />
 
     <item
-        android:id="@+id/nav_logout"
+        android:id="@+id/nav_profile"
         android:title="Profile"
         android:icon="@drawable/ic_white_profile" />
 
