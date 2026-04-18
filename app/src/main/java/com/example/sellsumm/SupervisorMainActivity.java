@@ -24,23 +24,16 @@ public class SupervisorMainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_supervisor_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.supervisor_main), (v, insets) ->
         {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Logic for switching between different tabs on the barchart
-        TabLayout tabLayout = findViewById(R.id.salesTabLayout);
-        BarChart barChart = findViewById(R.id.salesBarChart);
-
-        tabLayout.addTab(tabLayout.newTab().setText("Daily"));
-        tabLayout.addTab(tabLayout.newTab().setText("Weekly"));
-        tabLayout.addTab(tabLayout.newTab().setText("Monthly"));
 
         // Bottom navigation setup
-        bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav = findViewById(R.id.supervisor_bottom_nav);
         // default fragment on start
         loadFragment(new DashboardFragment());
 
