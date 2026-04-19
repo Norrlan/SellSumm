@@ -4,14 +4,6 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge; import androidx.appcompat.app.AppCompatActivity; import androidx.core.graphics.Insets; import androidx.core.view.ViewCompat; import androidx.core.view.WindowInsetsCompat; import androidx.fragment.app.Fragment;
 
-import com.example.sellsumm.AnalyticsFragment;
-import com.example.sellsumm.DashboardFragment;
-import com.example.sellsumm.InventoryFragment;
-import com.example.sellsumm.KPIFragment;
-import com.example.sellsumm.ProfileFragment;
-import com.example.sellsumm.R;
-import com.github.mikephil.charting.charts.BarChart;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SupervisorMainActivity extends AppCompatActivity

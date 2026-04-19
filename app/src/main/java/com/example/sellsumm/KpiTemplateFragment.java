@@ -1,64 +1,87 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link KpiTemplateFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class KpiTemplateFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public KpiTemplateFragment() {
-        // Required empty public constructor
+    public interface OnKpiCreatedListener {
+        void onKpiCreated(KPITemplateModel kpi);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment KpiTemplateFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static KpiTemplateFragment newInstance(String param1, String param2) {
-        KpiTemplateFragment fragment = new KpiTemplateFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private OnKpiCreatedListener kpiCreatedListener;
+
+    public void setOnKpiCreatedListener(OnKpiCreatedListener listener) {
+        this.kpiCreatedListener = listener;
     }
+
+    private final List<KPITemplateModel> templates = Arrays.asList(
+            new KPITemplateModel("", "Average Transaction Value",
+                    "Average spend per customer served", 0, "Higher", "Daily"),
+            new KPITemplateModel("", "Units per Transaction",
+                    "Higher is better - Shift", 0, "Higher", "Daily"),
+            new KPITemplateModel("", "Personal Sales Figure",
+                    "Total sales value achieved this shift", 0, "Higher", "Daily"),
+            new KPITemplateModel("", "Attachment Rate",
+                    "Percentage of sales with an add-on product ", 0, "Higher", "Daily"),
+            new KPITemplateModel("", "Sales Figure",
+                    "Higher is better - Shift", 0, "Higher", "Daily"),
+            new KPITemplateModel("", "Customers Served",
+                    "Number of purchasing customers", 0, "Higher", "Daily"),
+            new KPITemplateModel("", "Products Demos",
+                    "Number of product demos given to customers", 0, "Lower", "Weekly")
+    );
+
+    public KpiTemplateFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_kpi_template, container, false);
+        View view = inflater.inflate(
+                R.layout.fragment_kpi_template, container, false);
+
+        ImageView btnBack = view.findViewById(R.id.btn_back);
+        RecyclerView recyclerView =
+                view.findViewById(R.id.templates_recycler);
+
+        btnBack.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager()
+                        .popBackStack());
+
+        KPITemplateAdapter adapter = new KPITemplateAdapter(
+                templates,
+                template -> openConfigDialog(template));
+
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
+
+    private void openConfigDialog(KPITemplateModel template) {
+        KpiConfigDialog dialog =
+                KpiConfigDialog.newInstanceForEdit(template);
+
+        dialog.setSaveListener(savedKpi -> {
+            if (kpiCreatedListener != null) {
+                kpiCreatedListener.onKpiCreated(savedKpi);
+            }
+            requireActivity().getSupportFragmentManager()
+                    .popBackStack();
+        });
+
+        dialog.show(getChildFragmentManager(), "KpiConfigDialog");
     }
 }

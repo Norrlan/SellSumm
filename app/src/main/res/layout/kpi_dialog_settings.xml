@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:padding="20dp">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/kpiSettingsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KPI Settings"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/teal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/closeDialogBtn"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_black_close"
+        android:padding="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <TextView
+        android:id="@+id/kpiNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KPI Name"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiSettingsTitle"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/kpiNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/white_bg_field"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiNameLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- KPI Description -->
+    <TextView
+        android:id="@+id/kpiDescriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiNameInput"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/kpiDescriptionInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/white_bg_field"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiDescriptionLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Target Value -->
+    <TextView
+        android:id="@+id/kpiTargetLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Target Value (£)"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiDescriptionInput"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/kpiTargetInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/white_bg_field"
+        android:padding="12dp"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiTargetLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Event Name -->
+    <TextView
+        android:id="@+id/kpiEventLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Name"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiTargetInput"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/kpiEventInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/white_bg_field"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiEventLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Target Period -->
+    <TextView
+        android:id="@+id/kpiPeriodLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Target Period"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiEventInput"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/kpiPeriodGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiPeriodLabel"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/periodDaily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/periodWeekly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weekly"
+            android:textColor="@color/black"
+            android:layout_marginStart="12dp" />
+
+        <RadioButton
+            android:id="@+id/periodMonthly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly"
+            android:textColor="@color/black"
+            android:layout_marginStart="12dp" />
+
+        <RadioButton
+            android:id="@+id/periodQuarterly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quarterly"
+            android:textColor="@color/black"
+            android:layout_marginStart="12dp" />
+    </RadioGroup>
+
+    <!-- Direction -->
+    <TextView
+        android:id="@+id/kpiDirectionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Direction"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiPeriodGroup"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/kpiDirectionGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiDirectionLabel"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/directionHigher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Higher is better"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/directionLower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lower is better"
+            android:textColor="@color/black" />
+
+    </RadioGroup>
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/saveKpiButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/teal"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/kpiDirectionGroup"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

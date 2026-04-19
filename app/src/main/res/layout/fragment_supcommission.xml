@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SupcommissionFragment">
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/screen_background">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:layout_marginTop="27dp"
+            android:background="@color/teal"
+            android:paddingTop="10px"
+            android:text="Commissions"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/staff_member_tab"
+            android:layout_width="314dp"
+            android:layout_height="232dp"
+            android:layout_marginStart="59dp"
+            android:layout_marginTop="108dp"
+            android:layout_marginEnd="58dp"
+            android:background="@drawable/white_bg_field"
+            android:orientation="vertical"
+            android:padding="15px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+            <TextView
+                android:id="@+id/staff_member_label"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                android:text="Current staff Commission rate"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="50dp"
+                android:text="3%"
+                android:textAlignment="center"
+                android:textSize="28dp" />
+
+            <EditText
+                android:id="@+id/editTextNumberDecimal"
+                android:layout_width="281dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/bg_input_field"
+                android:ems="10"
+                android:hint="Enter %"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10dp"
+                android:textColorHint="@color/black" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="123dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="156dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="132dp"
+            android:backgroundTint="@color/white"
+            android:text="Button"
+            android:textColor="@color/teal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/staff_member_tab" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

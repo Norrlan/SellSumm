@@ -7,4 +7,12 @@
 
     <style name="Theme.SellSumm" parent="Base.Theme.SellSumm" />
 
+    <!-- KPI Dialog that pops up. -->
+    <style name="FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/teal</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
 </resources>

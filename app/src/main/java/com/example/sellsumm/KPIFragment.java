@@ -1,64 +1,116 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link KPIFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class KPIFragment extends Fragment {
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class KPIFragment extends Fragment
+{
 
-    public KPIFragment() {
-        // Required empty public constructor
-    }
+    private final List<KPITemplateModel> createdKpis = new ArrayList<>();
+    private CreatedKPIAdapter adapter;
+    private TextView emptyStateText;
+    private RecyclerView recyclerView;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment KPIFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static KPIFragment newInstance(String param1, String param2) {
-        KPIFragment fragment = new KPIFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public KPIFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_k_p_i, container, false);
+
+        emptyStateText = view.findViewById(R.id.empty_state_text);
+        recyclerView   = view.findViewById(R.id.kpi_recycler);
+        ImageView btnAdd = view.findViewById(R.id.btn_add_kpi);
+
+        // Set up adapter for created KPI cards
+        adapter = new CreatedKPIAdapter(createdKpis,
+                // Tap KPI card → open edit dialog
+                kpi -> openEditDialog(kpi),
+                // Tap delete button
+                kpi ->
+                {
+                    createdKpis.remove(kpi);
+                    adapter.notifyDataSetChanged();
+                    updateEmptyState();
+                    // TODO: delete from Firestore
+                }
+        );
+
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+
+        // + button → navigate to KPI Templates screen
+        btnAdd.setOnClickListener(v ->
+        {
+            KpiTemplateFragment templateFragment = new KpiTemplateFragment();
+
+            // Receive saved KPI back from template screen
+            templateFragment.setOnKpiCreatedListener(newKpi ->
+            {
+                createdKpis.add(newKpi);
+                adapter.notifyDataSetChanged();
+                updateEmptyState();
+                // TODO: save to Firestore
+            });
+
+            // + button → navigate to KPI Templates screen
+            btnAdd.setOnClickListener(view1 ->
+            {
+                KpiTemplateFragment templateFragment1 = new KpiTemplateFragment();
+
+                templateFragment.setOnKpiCreatedListener(newKpi -> {
+                    createdKpis.add(newKpi);
+                    adapter.notifyDataSetChanged();
+                    updateEmptyState();
+                });
+
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, templateFragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        });
+
+        updateEmptyState();
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_k_p_i, container, false);
+    private void openEditDialog(KPITemplateModel kpi)
+    {
+        KpiConfigDialog dialog = KpiConfigDialog.newInstanceForEdit(kpi);
+
+        dialog.setSaveListener(updatedKpi ->
+        {
+            int index = createdKpis.indexOf(kpi);
+            if (index >= 0) {
+                createdKpis.set(index, updatedKpi);
+                adapter.notifyDataSetChanged();
+                // TODO: update in Firestore
+            }
+        });
+
+        dialog.show(getChildFragmentManager(), "EditKpiDialog");
+    }
+
+    private void updateEmptyState()
+    {
+        boolean isEmpty = createdKpis.isEmpty();
+        emptyStateText.setVisibility(
+                isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(
+                isEmpty ? View.GONE : View.VISIBLE);
     }
 }
