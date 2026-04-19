@@ -44,6 +44,7 @@ public class DashboardFragment extends Fragment
     {
         // 1. Inflate the layout
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        //navigate to the Commissions screen when the container is clicked
 
         LinearLayout salesTab = view.findViewById(R.id.sales_tab);
 
