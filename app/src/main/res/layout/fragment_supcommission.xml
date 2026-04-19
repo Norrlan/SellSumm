@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/supervisor_commission"
     tools:context=".SupcommissionFragment">
-    <!-- TODO: Update blank fragment layout -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/screen_background">
 
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="47dp"
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="16dp"
             android:background="@color/teal"
             android:paddingTop="10px"
             android:text="Commissions"
@@ -23,23 +25,21 @@
             android:textColor="@color/white"
             android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <LinearLayout
             android:id="@+id/staff_member_tab"
             android:layout_width="314dp"
             android:layout_height="232dp"
-            android:layout_marginStart="59dp"
-            android:layout_marginTop="108dp"
-            android:layout_marginEnd="58dp"
+            android:layout_marginTop="164dp"
+            android:layout_marginEnd="24dp"
             android:background="@drawable/white_bg_field"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="15px"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3">
 
             <TextView
@@ -60,6 +60,7 @@
                 android:layout_marginTop="50dp"
                 android:text="3%"
                 android:textAlignment="center"
+                android:textColor="@color/black"
                 android:textSize="28dp" />
 
             <EditText
@@ -85,10 +86,10 @@
             android:layout_marginTop="64dp"
             android:layout_marginEnd="132dp"
             android:backgroundTint="@color/white"
-            android:text="Button"
+            android:text="Save"
             android:textColor="@color/teal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/staff_member_tab" />
 
