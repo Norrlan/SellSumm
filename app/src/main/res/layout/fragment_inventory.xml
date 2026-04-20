@@ -74,15 +74,13 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="77dp"
-        android:layout_marginTop="248dp"
-        android:layout_marginEnd="59dp"
+        android:layout_marginTop="164dp"
+        android:layout_marginEnd="68dp"
         android:text="Click the + to add products to your inventory"
         android:textColor="@color/black"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_results_recycler"

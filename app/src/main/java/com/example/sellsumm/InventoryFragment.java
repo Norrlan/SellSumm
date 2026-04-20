@@ -1,64 +1,143 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.util.Log;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link InventoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class InventoryFragment extends Fragment {
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import java.util.ArrayList;
+import java.util.List;
 
-    public InventoryFragment() {
-        // Required empty public constructor
-    }
+public class InventoryFragment extends Fragment
+{
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InventoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static InventoryFragment newInstance(String param1, String param2) {
-        InventoryFragment fragment = new InventoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private static final String TAG = "InventoryFragment";
+
+    private FirebaseFirestore db;
+    private List<ProductModel> productList = new ArrayList<>();
+    private ProductInventoryAdapter adapter;
+
+    private TextView  emptyStateText;
+    private RecyclerView recyclerView;
+
+    public InventoryFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_inventory, container, false);
+
+        db = FirebaseFirestore.getInstance();
+
+
+        emptyStateText  = view.findViewById(R.id.textView7);
+        recyclerView    = view.findViewById(R.id.products_results_recycler);
+        ImageView btnAdd = view.findViewById(R.id.imageView);
+        TextInputEditText searchBar = view.findViewById(R.id.Search_bar);
+
+        // Adapter setup for Tap product card → open edit dialog and the delete button
+        adapter = new ProductInventoryAdapter(productList, product -> openProductDialog(product), product -> deleteProduct(product)
+        );
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+
+        // Search bar
+        searchBar.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        //Add button
+        btnAdd.setOnClickListener(v -> openProductDialog(null));
+
+        loadProducts();
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inventory, container, false);
+    // Load all products from Firestore
+    private void loadProducts() {db.collection("products").get().addOnSuccessListener(querySnapshot -> {productList.clear();
+        for (QueryDocumentSnapshot doc : querySnapshot)
+        {
+            ProductModel product = new ProductModel(doc.getString("productId"), doc.getString("sku"),doc.getDouble("price") != null ? doc.getDouble("price") : 0, doc.getString("productName"), doc.getString("productType"));
+            productList.add(product);
+        } adapter.updateList(productList); updateEmptyState();
+                }).addOnFailureListener(e -> Log.e(TAG, "Failed to load products: " + e.getMessage()));
+    }
+
+    // Open dialog for add or edit
+    private void openProductDialog(ProductModel existingProduct)
+    {
+        ProductConfigDialog dialog = existingProduct == null ? ProductConfigDialog.newInstanceForAdd() : ProductConfigDialog.newInstanceForEdit(existingProduct);
+
+        dialog.setProductSaveListener(savedProduct ->
+        {
+            //  Logic to check if the product is an edit or a new addition
+            boolean isEdit = false;
+            for (int i = 0; i < productList.size(); i++)
+            {
+                if (productList.get(i).getProductId().equals(savedProduct.getProductId()))
+                {
+                    productList.set(i, savedProduct);
+                    isEdit = true;
+                    break;
+                }
+            }
+
+            if (!isEdit)
+            {
+                productList.add(savedProduct);
+            }
+            adapter.updateList(productList);
+            updateEmptyState();
+        });
+
+        dialog.show(getChildFragmentManager(), "ProductConfigDialog");
+    }
+
+    // Method to Delete product
+    private void deleteProduct(ProductModel product)
+    {
+        // Remove from Firestore
+        db.collection("products").document(product.getProductId()).delete().addOnSuccessListener(aVoid -> {
+                    // Remove from local list
+                    productList.remove(product);
+                    adapter.updateList(productList);
+                    updateEmptyState();
+                    Log.d(TAG, "Product deleted: " + product.getProductName());
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Delete failed: " + e.getMessage()));
+    }
+
+    //Show or hide empty state
+    private void updateEmptyState()
+    {
+        boolean isEmpty = productList.isEmpty();
+        emptyStateText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 }
