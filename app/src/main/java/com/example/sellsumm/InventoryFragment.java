@@ -83,7 +83,7 @@ public class InventoryFragment extends Fragment
     private void loadProducts() {db.collection("products").get().addOnSuccessListener(querySnapshot -> {productList.clear();
         for (QueryDocumentSnapshot doc : querySnapshot)
         {
-            ProductModel product = new ProductModel(doc.getString("productId"), doc.getString("sku"),doc.getDouble("price") != null ? doc.getDouble("price") : 0, doc.getString("productName"), doc.getString("productType"));
+            ProductModel product = new ProductModel(doc.getString("productId"),doc.getDouble("price") != null ? doc.getDouble("price") : 0, doc.getString("productName"), doc.getString("productType"));
             productList.add(product);
         } adapter.updateList(productList); updateEmptyState();
                 }).addOnFailureListener(e -> Log.e(TAG, "Failed to load products: " + e.getMessage()));
