@@ -141,7 +141,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Commission"
+                    android:text="No of Transactions"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -149,7 +149,7 @@
                     android:id="@+id/commissionValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="£0.00"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -157,7 +157,7 @@
 
         </GridLayout>
 
-        <!-- Sales Overview card -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -168,7 +168,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Card header row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Products per Transaction"
+                    android:text=" Avg Products per Transaction"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
@@ -271,8 +270,8 @@
 
 
         <LinearLayout
-            android:layout_width="378dp"
-            android:layout_height="127dp"
+            android:layout_width="377dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
@@ -344,6 +343,60 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:useDefaultMargins="true">
+
+            <!-- Target Sales -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/dasboard_small_stats"
+                android:gravity="center"
+                android:id="@+id/commissionCard"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Commission"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/dasboard_small_stats"
+                android:gravity="center"
+                android:id="@+id/targetCard"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Targets"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </GridLayout>
+
+
+
 
     </LinearLayout>
 </ScrollView>
