@@ -1,54 +1,131 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
- */
-public class SupcommissionFragment extends Fragment
-{
+import com.google.firebase.firestore.FirebaseFirestore;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+import java.util.HashMap;
+import java.util.Map;
 
-    // TODO: Rename and change types of parameters
+public class SupcommissionFragment extends Fragment {
 
-    public SupcommissionFragment() {
-        // Required empty public constructor
-    }
+    private static final String TAG = "SupcommissionFragment";
 
-    /**
-     *
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SupcommissionFragment newInstance(String param1, String param2)
-    {
-        SupcommissionFragment fragment = new SupcommissionFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private FirebaseFirestore db;
+
+    // Views — using your exact XML IDs
+    private TextView currentRateDisplay;
+    private EditText inputRate;
+    private Button   btnSave;
+
+    public SupcommissionFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(
+                R.layout.fragment_supcommission, container, false);
 
+        db = FirebaseFirestore.getInstance();
+
+        // ── Bind views using your exact IDs ─────────────────────
+        currentRateDisplay = view.findViewById(R.id.textView5);
+        inputRate          = view.findViewById(R.id.editTextNumberDecimal);
+        btnSave            = view.findViewById(R.id.button2);
+
+        // ── Load existing rate from Firestore ────────────────────
+        loadCurrentRate();
+
+        // ── Save button ──────────────────────────────────────────
+        btnSave.setOnClickListener(v -> saveRate());
+
+        return view;
+    }
+
+    // ── Read current rate from Firestore and display it ──────────
+    private void loadCurrentRate() {
+        db.collection("commissionSettings")
+                .document("default")
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists() && doc.getDouble("rate") != null) {
+                        double rate = doc.getDouble("rate");
+                        // Show current rate in the display TextView
+                        currentRateDisplay.setText(
+                                String.format("%.1f%%", rate));
+                    } else {
+                        // No rate set yet — show default placeholder
+                        currentRateDisplay.setText("0%");
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to load rate: "
+                                + e.getMessage()));
+    }
+
+    // ── Validate and save new rate to Firestore ──────────────────
+    private void saveRate() {
+        String input = inputRate.getText() != null ?
+                inputRate.getText().toString().trim() : "";
+
+        // Validate — must not be empty
+        if (input.isEmpty()) {
+            inputRate.setError("Please enter a commission rate");
+            return;
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_supcommission, container, false);
+        double rate;
+        try {
+            rate = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            inputRate.setError("Invalid number");
+            return;
+        }
+
+        // Validate — must be between 0 and 100
+        if (rate < 0 || rate > 100) {
+            inputRate.setError("Rate must be between 0 and 100");
+            return;
+        }
+
+        // Build Firestore document
+        Map<String, Object> data = new HashMap<>();
+        data.put("rate", rate);
+
+        db.collection("commissionSettings")
+                .document("default")
+                .set(data)
+                .addOnSuccessListener(aVoid -> {
+                    // Update the display immediately
+                    currentRateDisplay.setText(
+                            String.format("%.1f%%", rate));
+
+                    // Clear the input field
+                    inputRate.setText("");
+
+                    Toast.makeText(requireContext(),
+                            "Commission rate saved",
+                            Toast.LENGTH_SHORT).show();
+
+                    Log.d(TAG, "Commission rate saved: " + rate);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(),
+                            "Failed to save rate",
+                            Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Save failed: " + e.getMessage());
+                });
     }
 }

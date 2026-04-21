@@ -1,5 +1,6 @@
 package com.example.sellsumm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -42,29 +43,27 @@ public class DashboardFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        // 1. Inflate the layout
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        //navigate to the Commissions screen when the container is clicked
 
+        // Navigate to Commissions screen
         LinearLayout salesTab = view.findViewById(R.id.sales_tab);
-
         salesTab.setOnClickListener(v ->
         {
             Fragment sup = new SupcommissionFragment();
 
-            requireActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, sup)
-                    .addToBackStack(null)
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, sup).addToBackStack(null)
                     .commit();
         });
 
-        // 4. Return the inflated view
+        // Navigate to Manage Staff screen
+        LinearLayout manageStaffTab = view.findViewById(R.id.staff_member_tab);
+        manageStaffTab.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(requireActivity(), ManageStaffActivity.class);
+            startActivity(intent);
+        });
+
         return view;
-
-
-
     }
 
 

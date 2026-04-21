@@ -46,6 +46,7 @@ public class ProductConfigDialog extends DialogFragment
         args.putString("product_id",   product.getProductId());
         args.putString("price",        String.valueOf(product.getPrice()));
         args.putString("product_name", product.getProductName());
+        args.putString("product_category",product.getProductCategory());
         args.putString("product_type", product.getProductType());
         dialog.setArguments(args);
         return dialog;
@@ -66,18 +67,14 @@ public class ProductConfigDialog extends DialogFragment
 
         if (getArguments() != null)
         {
-            existingProduct = new ProductModel(getArguments().getString("product_id"), Double.parseDouble(getArguments().getString("price", "0")), getArguments().getString("product_name"),
-                    getArguments().getString("product_type")
-            );
+            existingProduct = new ProductModel(getArguments().getString("product_id"), Double.parseDouble(getArguments().getString("price", "0")), getArguments().getString("product_name"), getArguments().getString("product_category"), getArguments().getString("product_type"));
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(
-                R.layout.product_dialog_settings, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        return inflater.inflate(R.layout.product_dialog_settings, container, false);
     }
 
     @Override
@@ -89,6 +86,7 @@ public class ProductConfigDialog extends DialogFragment
         ImageView btnClose      = view.findViewById(R.id.closeDialogBtn);
         EditText  inputPrice    = view.findViewById(R.id.productpriceInput);
         EditText  inputName     = view.findViewById(R.id.productNameInput);
+        EditText  inputCategory = view.findViewById(R.id.productCategoryInput);
         Spinner   spinnerType   = view.findViewById(R.id.spinner3);
         Button    btnSave       = view.findViewById(R.id.saveProductButton);
 
@@ -125,10 +123,9 @@ public class ProductConfigDialog extends DialogFragment
         {
 
             // Collect values
-            String priceStr = inputPrice.getText() != null ?
-                    inputPrice.getText().toString().trim() : "0";
-            String name = inputName.getText() != null ?
-                    inputName.getText().toString().trim() : "";
+            String priceStr = inputPrice.getText() != null ? inputPrice.getText().toString().trim() : "0";
+            String name = inputName.getText() != null ? inputName.getText().toString().trim() : "";
+            String category = inputCategory.getText() != null ? inputCategory.getText().toString().trim() : "";
             String type = spinnerType.getSelectedItem().toString();
 
             // Validate
@@ -154,8 +151,7 @@ public class ProductConfigDialog extends DialogFragment
                     : UUID.randomUUID().toString();
 
             // Build product model
-            ProductModel saved = new ProductModel(
-                    productId,price, name, type);
+            ProductModel saved = new ProductModel(productId,price, name, category,type);
 
             // Save to Firestore
             saveToFirestore(saved);
@@ -186,6 +182,7 @@ public class ProductConfigDialog extends DialogFragment
         data.put("productId",   product.getProductId());
         data.put("price",       product.getPrice());
         data.put("productName", product.getProductName());
+        data.put("productCategory", product.getProductCategory());
         data.put("productType", product.getProductType());
 
         db.collection("products").document(product.getProductId()).set(data).addOnSuccessListener(aVoid -> android.util.Log.d("ProductConfig", "Product saved: " + product.getProductName())).addOnFailureListener(e -> android.util.Log.e("ProductConfig", "Save failed: " + e.getMessage()));

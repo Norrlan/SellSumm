@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SellSumm">
         <activity
+            android:name=".StaffDashbaord"
+            android:exported="false" />
+        <activity
             android:name=".ManageStaffActivity"
             android:exported="false" />
         <activity

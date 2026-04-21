@@ -5,24 +5,25 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/screen_background"
     tools:context=".ManageStaffActivity">
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="135dp"
         android:layout_height="27dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="254dp"
         android:text="Manage Users"
         android:textColor="@color/teal"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="410dp"
         android:id="@+id/manage_staff_recycler"
-        android:layout_height="539dp"
+        android:layout_width="409dp"
+        android:layout_height="626dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="1dp"

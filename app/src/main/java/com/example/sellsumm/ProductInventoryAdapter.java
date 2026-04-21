@@ -28,9 +28,8 @@ public class ProductInventoryAdapter extends
     private final OnProductClickListener  clickListener;
     private final OnProductDeleteListener deleteListener;
 
-    public ProductInventoryAdapter(List<ProductModel> productList,
-                                   OnProductClickListener clickListener,
-                                   OnProductDeleteListener deleteListener) {
+    public ProductInventoryAdapter(List<ProductModel> productList, OnProductClickListener clickListener, OnProductDeleteListener deleteListener)
+    {
         this.productList    = productList;
         this.filteredList   = new ArrayList<>(productList);
         this.clickListener  = clickListener;
@@ -48,7 +47,8 @@ public class ProductInventoryAdapter extends
 
     @Override
     public void onBindViewHolder(
-            @NonNull ProductViewHolder holder, int position) {
+            @NonNull ProductViewHolder holder, int position)
+    {
         ProductModel product = filteredList.get(position);
 
         holder.productName.setText(product.getProductName());

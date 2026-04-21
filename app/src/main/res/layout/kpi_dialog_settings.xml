@@ -82,7 +82,7 @@
         android:id="@+id/kpiTargetLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Target Value (£)"
+        android:text="Target"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -105,82 +105,74 @@
     <!-- Event Name -->
     <TextView
         android:id="@+id/kpiEventLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Name"
+        android:layout_width="94dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="20dp"
+        android:text="Target Unit"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/kpiTargetInput"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kpiTargetInput" />
 
     <EditText
-        android:id="@+id/kpiEventInput"
+        android:id="@+id/TargetUnitInput"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@drawable/white_bg_field"
         android:padding="12dp"
+        android:hint=" Enter (£) , (%) or a number"
+        android:textColorHint="@color/grey"
         android:textColor="@color/black"
         android:layout_marginTop="6dp"
         app:layout_constraintTop_toBottomOf="@id/kpiEventLabel"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Target Period -->
+
+    <!-- Direction -->
+
     <TextView
         android:id="@+id/kpiPeriodLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
         android:text="Target Period"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/kpiEventInput"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TargetUnitInput" />
 
     <RadioGroup
         android:id="@+id/kpiPeriodGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="334dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        android:layout_marginTop="6dp"
-        app:layout_constraintTop_toBottomOf="@id/kpiPeriodLabel"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RadioButton
-            android:id="@+id/periodDaily"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Daily"
-            android:textColor="@color/black" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kpiPeriodLabel">
 
         <RadioButton
             android:id="@+id/periodWeekly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
             android:text="Weekly"
-            android:textColor="@color/black"
-            android:layout_marginStart="12dp" />
+            android:textColor="@color/black" />
 
         <RadioButton
             android:id="@+id/periodMonthly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="92dp"
             android:text="Monthly"
-            android:textColor="@color/black"
-            android:layout_marginStart="12dp" />
+            android:textColor="@color/black" />
 
-        <RadioButton
-            android:id="@+id/periodQuarterly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quarterly"
-            android:textColor="@color/black"
-            android:layout_marginStart="12dp" />
     </RadioGroup>
 
-    <!-- Direction -->
     <TextView
         android:id="@+id/kpiDirectionLabel"
         android:layout_width="wrap_content"
@@ -207,6 +199,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Higher is better"
+            android:layout_marginStart="12dp"
             android:textColor="@color/black" />
 
         <RadioButton
@@ -214,6 +207,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lower is better"
+            android:layout_marginStart="92dp"
             android:textColor="@color/black" />
 
     </RadioGroup>
