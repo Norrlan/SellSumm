@@ -1,4 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_white_dashaboard"
+        />
+
+    <item
+        android:id="@+id/nav_analytics"
+        android:title="Analytics"
+        android:icon="@drawable/ic_white_analysis" />
+
+    <item
+        android:id="@+id/nav_kpi"
+        android:title="KPIs"
+        android:icon="@drawable/kpi_icon" />
+
+    <item
+        android:id="@+id/nav_sales"
+        android:title="Sales"
+        android:icon="@drawable/ic_white_sales" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_white_profile" />
+
 
 </menu>

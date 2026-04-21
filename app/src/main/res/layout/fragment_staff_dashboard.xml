@@ -270,11 +270,11 @@
 
 
         <LinearLayout
-            android:layout_width="377dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/dashboad_black_card"
             android:orientation="vertical"
             android:padding="16dp">
@@ -354,13 +354,13 @@
             android:rowCount="2"
             android:useDefaultMargins="true">
 
-            <!-- Target Sales -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="6dp"
-                android:background="@drawable/dasboard_small_stats"
+                android:background="@drawable/dashboad_black_card"
                 android:gravity="center"
                 android:id="@+id/commissionCard"
                 android:orientation="vertical">
@@ -379,15 +379,15 @@
                 android:layout_height="80dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="6dp"
-                android:background="@drawable/dasboard_small_stats"
+                android:background="@drawable/dashboad_black_card"
                 android:gravity="center"
-                android:id="@+id/targetCard"
+                android:id="@+id/kpiscore_card"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Targets"
+                    android:text="KPI Score"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
