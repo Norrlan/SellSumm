@@ -41,7 +41,7 @@ public class KpiConfigDialog extends DialogFragment
         args.putString("kpi_name",        kpi.getName());
         args.putString("kpi_description", kpi.getDescription());
         args.putDouble("kpi_target",      kpi.getTargetValue());
-        args.putString("kpi_target_unit", kpi.getTargetUnit());  //
+        args.putString("kpi_target_unit", kpi.getTargetUnit());
         args.putString("kpi_direction",   kpi.getDirection());
         args.putString("kpi_frequency",   kpi.getFrequency());
         dialog.setArguments(args);
@@ -53,19 +53,17 @@ public class KpiConfigDialog extends DialogFragment
         this.listener = listener;
     }
 
-    // ── onCreate — rebuild existingKpi with targetUnit ────────────
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialog);
 
-        if (getArguments() != null) {
-            existingKpi = new KPITemplateModel(
-                    getArguments().getString("kpi_id"),
-                    getArguments().getString("kpi_name"),
-                    getArguments().getString("kpi_description"),
+        if (getArguments() != null)
+        {
+            existingKpi = new KPITemplateModel(getArguments().getString("kpi_id"), getArguments().getString("kpi_name"), getArguments().getString("kpi_description"),
                     getArguments().getDouble("kpi_target"),
-                    getArguments().getString("kpi_target_unit"),  // NEW
+                    getArguments().getString("kpi_target_unit"),
                     getArguments().getString("kpi_direction"),
                     getArguments().getString("kpi_frequency")
             );
@@ -78,7 +76,6 @@ public class KpiConfigDialog extends DialogFragment
         return inflater.inflate(R.layout.kpi_dialog_settings, container, false);
     }
 
-    // onViewCreated — bind TargetUnitInput and pre-fill
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState)
     {
@@ -94,12 +91,14 @@ public class KpiConfigDialog extends DialogFragment
         RadioGroup radioPeriod    = view.findViewById(R.id.kpiPeriodGroup);
         RadioGroup radioDirection = view.findViewById(R.id.kpiDirectionGroup);
 
-        if (existingKpi != null) {
+        if (existingKpi != null)
+        {
             tvTitle.setText("Edit KPI");
             inputName.setText(existingKpi.getName());
             inputDesc.setText(existingKpi.getDescription());
 
-            if (existingKpi.getTargetValue() > 0) {
+            if (existingKpi.getTargetValue() > 0)
+            {
                 inputTarget.setText(
                         String.valueOf(existingKpi.getTargetValue()));
             }
@@ -117,15 +116,16 @@ public class KpiConfigDialog extends DialogFragment
                 default:          radioPeriod.check(R.id.periodMonthly);     break;
             }
 
-            if ("Higher".equals(existingKpi.getDirection())) {
+            if ("Higher".equals(existingKpi.getDirection()))
+            {
                 radioDirection.check(R.id.directionHigher);
-            } else {
+            }
+            else
+            {
                 radioDirection.check(R.id.directionLower);
             }
-        } else {
-            tvTitle.setText("KPI Settings");
-            radioPeriod.check(R.id.periodWeekly);
-            radioDirection.check(R.id.directionHigher);
+
+        }   else {tvTitle.setText("KPI Settings");radioPeriod.check(R.id.periodWeekly);radioDirection.check(R.id.directionHigher);
         }
 
         btnClose.setOnClickListener(v -> dismiss());
@@ -162,7 +162,6 @@ public class KpiConfigDialog extends DialogFragment
 
             String id = (existingKpi != null && existingKpi.getId() != null && !existingKpi.getId().isEmpty()) ? existingKpi.getId() : UUID.randomUUID().toString();
 
-            // Build model with targetUnit included
             KPITemplateModel saved = new KPITemplateModel(id, name, desc, targetValue, targetUnit,direction, frequency);
 
             if (listener != null) listener.onKpiSaved(saved);

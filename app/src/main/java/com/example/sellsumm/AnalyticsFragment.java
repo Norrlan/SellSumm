@@ -1,64 +1,117 @@
 package com.example.sellsumm;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnalyticsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnalyticsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recycler;
+    private AnalyticsAdapter adapter;
+    private List<AnalyticKPIModel> kpiList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FirebaseFirestore db;
+    private String storeId = "STORE_ID_HERE"; // Replace later
 
-    public AnalyticsFragment() {
-        // Required empty public constructor
-    }
+    public AnalyticsFragment() {}
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnalyticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AnalyticsFragment newInstance(String param1, String param2) {
-        AnalyticsFragment fragment = new AnalyticsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static AnalyticsFragment newInstance() {
+        return new AnalyticsFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_analytics, container, false);
+
+        recycler = view.findViewById(R.id.analytics_recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        kpiList = new ArrayList<>();
+        adapter = new AnalyticsAdapter(getContext(), kpiList);
+        recycler.setAdapter(adapter);
+
+        db = FirebaseFirestore.getInstance();
+
+        loadAnalytics();
+
+        return view;
+    }
+
+    private void loadAnalytics() {
+
+        db.collection("stores")
+                .document(storeId)
+                .collection("staffPerformance")
+                .get()
+                .addOnSuccessListener(query -> {
+
+                    double totalSales = 0;
+                    int totalUnits = 0;
+                    int totalTransactions = 0;
+                    int addonCount = 0;
+                    int defaultCount = 0;
+
+                    for (DocumentSnapshot doc : query.getDocuments()) {
+
+                        totalSales += doc.getDouble("totalSales");
+                        totalUnits += doc.getLong("totalUnits");
+                        totalTransactions += doc.getLong("totalTransactions");
+                        addonCount += doc.getLong("transactionsWithAddons");
+
+                        // Default item = transaction without addon
+                        if (doc.getLong("transactionsWithAddons") == 0) {
+                            defaultCount++;
+                        }
+                    }
+
+                    double atv = totalTransactions == 0 ? 0 : totalSales / totalTransactions;
+                    double upt = totalTransactions == 0 ? 0 : (double) totalUnits / totalTransactions;
+                    double attachmentRate = totalTransactions == 0 ? 0 :
+                            ((double) addonCount / totalTransactions) * 100;
+
+                    // Add KPIs
+                    addKPI("ATV", "£" + format(atv), atv, 50);
+                    addKPI("Units per Transaction", format(upt), upt, 10);
+                    addKPI("Attachment Rate", format(attachmentRate) + "%", attachmentRate, 30);
+                    addKPI("Sales Figure", "£" + format(totalSales), totalSales, 10000);
+                    addKPI("Customer Engagement", totalTransactions + "", totalTransactions, 200);
+                    addKPI("Add-on Count", addonCount + "", addonCount, 100);
+                    addKPI("Default item count", defaultCount + "", defaultCount, 100);
+
+                    adapter.notifyDataSetChanged();
+                });
+    }
+
+    private void addKPI(String title, String value, double actual, double target) {
+
+        int progress = (int) ((actual / target) * 100);
+        if (progress > 100) progress = 100;
+
+        int color;
+        if (progress >= 80) color = Color.GREEN;
+        else if (progress >= 50) color = Color.YELLOW;
+        else color = Color.RED;
+
+        kpiList.add(new AnalyticKPIModel(title, value, progress, color));
+    }
+
+    private String format(double num) {
+        return String.format("%.2f", num);
     }
 }

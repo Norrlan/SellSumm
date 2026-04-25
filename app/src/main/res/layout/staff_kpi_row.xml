@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/dashboad_black_card">
+
+    <!-- KPI Name -->
+    <TextView
+        android:id="@+id/kpiName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Average Transaction Value"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- KPI Description -->
+    <TextView
+        android:id="@+id/kpiDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Higher is better - Shift"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+
+    <!-- Target Value -->
+    <TextView
+        android:id="@+id/kpiTarget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Target: £500"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp" />
+
+    <!-- Actual Value -->
+    <TextView
+        android:id="@+id/kpiActual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actual: £420"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+
+    <!-- Status -->
+    <TextView
+        android:id="@+id/kpiStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: Keep Pushing"
+        android:textColor="@color/teal"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>

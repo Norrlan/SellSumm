@@ -20,22 +20,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ProductConfigDialog extends DialogFragment
-{
+public class ProductConfigDialog extends DialogFragment {
 
     // Listener interface
-    public interface ProductSaveListener
-    {
+    public interface ProductSaveListener {
         void onProductSaved(ProductModel product);
     }
 
     private ProductSaveListener listener;
     private ProductModel existingProduct;
 
-    //Factory methods
-
-    public static ProductConfigDialog newInstanceForAdd()
-    {
+    // Factory methods
+    public static ProductConfigDialog newInstanceForAdd() {
         return new ProductConfigDialog();
     }
 
@@ -43,11 +39,11 @@ public class ProductConfigDialog extends DialogFragment
     {
         ProductConfigDialog dialog = new ProductConfigDialog();
         Bundle args = new Bundle();
-        args.putString("product_id",   product.getProductId());
-        args.putString("price",        String.valueOf(product.getPrice()));
-        args.putString("product_name", product.getProductName());
-        args.putString("product_category",product.getProductCategory());
-        args.putString("product_type", product.getProductType());
+        args.putString("product_id",        product.getProductId());
+        args.putString("price",             String.valueOf(product.getPrice()));
+        args.putString("product_name",      product.getProductName());
+        args.putString("product_category",  product.getProductCategory());
+        args.putString("product_type",      product.getProductType());
         dialog.setArguments(args);
         return dialog;
     }
@@ -57,8 +53,7 @@ public class ProductConfigDialog extends DialogFragment
         this.listener = listener;
     }
 
-    //Lifecycle
-
+    // Lifecycle
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -67,7 +62,28 @@ public class ProductConfigDialog extends DialogFragment
 
         if (getArguments() != null)
         {
-            existingProduct = new ProductModel(getArguments().getString("product_id"), Double.parseDouble(getArguments().getString("price", "0")), getArguments().getString("product_name"), getArguments().getString("product_category"), getArguments().getString("product_type"));
+            String id       = getArguments().getString("product_id");
+            String priceStr = getArguments().getString("price", "0");
+            String name     = getArguments().getString("product_name");
+            String category = getArguments().getString("product_category");
+            String type     = getArguments().getString("product_type");
+
+            double price = 0;
+            try
+            {
+                price = Double.parseDouble(priceStr);
+            } catch (NumberFormatException ignored) {}
+
+            boolean isAddon = type != null && type.equalsIgnoreCase("Add-on");
+
+            existingProduct = new ProductModel(
+                    id,
+                    price,
+                    name,
+                    category,
+                    type,
+                    isAddon
+            );
         }
     }
 
@@ -82,7 +98,6 @@ public class ProductConfigDialog extends DialogFragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        // bind elements
         ImageView btnClose      = view.findViewById(R.id.closeDialogBtn);
         EditText  inputPrice    = view.findViewById(R.id.productpriceInput);
         EditText  inputName     = view.findViewById(R.id.productNameInput);
@@ -91,7 +106,6 @@ public class ProductConfigDialog extends DialogFragment
         Button    btnSave       = view.findViewById(R.id.saveProductButton);
 
         // Spinner setup
-        // Two options only — Default and Add-on
         String[] productTypes = {"Default", "Add-on"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, productTypes);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -102,16 +116,15 @@ public class ProductConfigDialog extends DialogFragment
         {
             inputPrice.setText(String.valueOf(existingProduct.getPrice()));
             inputName.setText(existingProduct.getProductName());
+            inputCategory.setText(existingProduct.getProductCategory());
 
-            // Pre-select correct spinner position
-            if ("Add-on".equals(existingProduct.getProductType()))
+            if ("Add-on".equalsIgnoreCase(existingProduct.getProductType()))
             {
                 spinnerType.setSelection(1);
             }
-
             else
             {
-                spinnerType.setSelection(0); // Default
+                spinnerType.setSelection(0);
             }
         }
 
@@ -122,42 +135,43 @@ public class ProductConfigDialog extends DialogFragment
         btnSave.setOnClickListener(v ->
         {
 
-            // Collect values
-            String priceStr = inputPrice.getText() != null ? inputPrice.getText().toString().trim() : "0";
-            String name = inputName.getText() != null ? inputName.getText().toString().trim() : "";
-            String category = inputCategory.getText() != null ? inputCategory.getText().toString().trim() : "";
+            String priceStr = inputPrice.getText() != null
+                    ? inputPrice.getText().toString().trim()
+                    : "0";
+
+            String name = inputName.getText() != null
+                    ? inputName.getText().toString().trim()
+                    : "";
+
+            String category = inputCategory.getText() != null
+                    ? inputCategory.getText().toString().trim()
+                    : "";
+
             String type = spinnerType.getSelectedItem().toString();
 
-            // Validate
-
-            if (name.isEmpty()) {
+            if (name.isEmpty())
+            {
                 inputName.setError("Product name is required");
                 return;
             }
 
             double price = 0;
-            try {
-                price = Double.parseDouble(priceStr);
-            } catch (NumberFormatException e)
+            try
             {
-                price = 0;
-            }
+                price = Double.parseDouble(priceStr);
+            } catch (NumberFormatException ignored) {}
 
-            // Build product ID
-            String productId = (existingProduct != null
-                    && existingProduct.getProductId() != null
-                    && !existingProduct.getProductId().isEmpty())
-                    ? existingProduct.getProductId()
-                    : UUID.randomUUID().toString();
+            String productId =
+                    (existingProduct != null && existingProduct.getProductId() != null && !existingProduct.getProductId().isEmpty()) ? existingProduct.getProductId() : UUID.randomUUID().toString();
 
-            // Build product model
-            ProductModel saved = new ProductModel(productId,price, name, category,type);
+            boolean isAddon = type.equalsIgnoreCase("Add-on");
 
-            // Save to Firestore
+            ProductModel saved = new ProductModel(productId, price, name, category, type, isAddon);
+
             saveToFirestore(saved);
 
-            // Fire callback to update UI
-            if (listener != null) listener.onProductSaved(saved);
+            if (listener != null) {listener.onProductSaved(saved);}
+
             dismiss();
         });
     }
@@ -169,22 +183,27 @@ public class ProductConfigDialog extends DialogFragment
         Dialog dialog = getDialog();
         if (dialog != null && dialog.getWindow() != null)
         {
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            );
         }
     }
 
-    // Firestore save Save the product to Firestore
+    // Save product data to firestore
     private void saveToFirestore(ProductModel product)
     {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> data = new HashMap<>();
-        data.put("productId",   product.getProductId());
-        data.put("price",       product.getPrice());
-        data.put("productName", product.getProductName());
-        data.put("productCategory", product.getProductCategory());
-        data.put("productType", product.getProductType());
+        data.put("productId",        product.getProductId());
+        data.put("price",            product.getPrice());
+        data.put("productName",      product.getProductName());
+        data.put("productCategory",  product.getProductCategory());
+        data.put("productType",      product.getProductType());
 
-        db.collection("products").document(product.getProductId()).set(data).addOnSuccessListener(aVoid -> android.util.Log.d("ProductConfig", "Product saved: " + product.getProductName())).addOnFailureListener(e -> android.util.Log.e("ProductConfig", "Save failed: " + e.getMessage()));
+        data.put("isAddon",          product.isAddon());
+
+        db.collection("products").document(product.getProductId()).set(data).addOnSuccessListener(aVoid ->
+                        android.util.Log.d("ProductConfig", "Product saved: " + product.getProductName())).addOnFailureListener(e ->
+                        android.util.Log.e("ProductConfig", "Save failed: " + e.getMessage()));
     }
 }

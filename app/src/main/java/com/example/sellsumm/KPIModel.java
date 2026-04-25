@@ -7,7 +7,7 @@ public class KPIModel
     public double actual;
     public String status;
 
-    public KPIModel() {} // Required for Firestore
+    public KPIModel() {}
 
     public KPIModel(String name, double target, double actual, String status)
     {

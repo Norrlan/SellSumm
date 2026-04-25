@@ -22,12 +22,11 @@ public class StaffDashboardFragment extends Fragment {
 
     private static final String TAG = "StaffDashboardFragment";
 
-    // Firestore + Auth
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUid;
 
-    // Views
+
     private TextView welcomeText;
     private TextView targetSalesValue;
     private TextView salesFigureValue;
@@ -62,7 +61,6 @@ public class StaffDashboardFragment extends Fragment {
         mAuth   = FirebaseAuth.getInstance();
         currentUid = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
 
-        // Bind views
         welcomeText        = view.findViewById(R.id.welcomeText);
         targetSalesValue   = view.findViewById(R.id.targetSalesValue);
         salesFigureValue   = view.findViewById(R.id.salesFigureValue);
@@ -83,7 +81,6 @@ public class StaffDashboardFragment extends Fragment {
             return view;
         }
 
-        // Load data in sequence
         loadUserProfile();
         loadCommissionRate();
         loadTransactions();
@@ -162,8 +159,7 @@ public class StaffDashboardFragment extends Fragment {
 
     // Load KPI performance
     // KPIs were created by the supervisor and stored in Firestore
-    // We count total KPIs as the target and check how many the
-    // staff member has logged an entry against as "hit"
+    // Count total KPIs as the target and check how many the staff member has logged an entry against as "hit"
     private void loadKpiPerformance()
     {
         db.collection("kpis").get().addOnSuccessListener(querySnapshot ->
@@ -201,29 +197,27 @@ public class StaffDashboardFragment extends Fragment {
         // Sales figure
         salesFigureValue.setText(String.format("£%.2f", totalSales));
 
-        // ATV — total sales divided by number of transactions
+
         double atv = totalTransactions > 0 ? totalSales / totalTransactions : 0;
         atvValue.setText(String.format("£%.2f", atv));
 
-        // Units sold
+
         unitsSoldValue.setText(String.valueOf(totalUnitsSold));
 
-        // Units per transaction
         double upt = totalTransactions > 0 ? (double) totalUnitsSold / totalTransactions : 0;
         unitsPerTransValue.setText(String.format("%.1f", upt));
 
-        // Attach rate — transactions with add-on / total × 100
+
         double attachRate = totalTransactions > 0 ? ((double) transWithAddOn / totalTransactions) * 100 : 0;
         attachRateValue.setText(String.format("%.1f%%", attachRate));
 
-        // Sales overview status — based on ATV vs target
-        // Target sales is fetched separately below
+        // Sales overview status
         updateSalesOverviewStatus();
     }
 
     private void updateCommissionDisplay()
     {
-        // Commission = total sales × fixed rate %
+        // Commission
         double commission = totalSales * (commissionRate / 100);
         commissionValue.setText(String.format("£%.2f", commission));
     }
@@ -231,8 +225,9 @@ public class StaffDashboardFragment extends Fragment {
     private void updateSalesOverviewStatus()
     {
         // Load target sales set by supervisor for this staff
-        db.collection("kpis").whereEqualTo("name", "Personal Sales Figure").get().addOnSuccessListener(querySnapshot -> {
-                    double targetSales = 0;
+        db.collection("kpis").whereEqualTo("name", "Personal Sales Figure").get().addOnSuccessListener(querySnapshot ->
+        {
+                   double targetSales = 0;
                     for (QueryDocumentSnapshot doc : querySnapshot)
                     {
                         Double t = doc.getDouble("targetValue");
@@ -266,7 +261,6 @@ public class StaffDashboardFragment extends Fragment {
 
     private void updateKpiPerformanceDisplay()
     {
-        // Target and actual score text
         targetScoreText.setText("Target Score: " + totalKpiTarget + " KPIs");
         actualScoreText.setText("Actual Score: " + kpisHit + " KPIs");
 
@@ -274,7 +268,7 @@ public class StaffDashboardFragment extends Fragment {
         int progress = totalKpiTarget > 0 ? (kpisHit * 100) / totalKpiTarget : 0;
         kpiProgressBar.setProgress(progress);
 
-        // Three-tier status logic green: hit 80%+ of KPIs, yellow: hit 40–79% , Red: hit less than 40% (1 or 2 out of 7)
+        // KPI status logic
         if (totalKpiTarget > 0)
         {
             double pct = ((double) kpisHit / totalKpiTarget) * 100;

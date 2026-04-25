@@ -10,13 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class DashboardFragment extends Fragment
 {
+
+    private TextView bestEmployeeName, bestEmployeeAtv, bestEmployeeUpt, bestEmployeeAttachment;
+    private FirebaseFirestore db;
+    private String storeId = "STORE_ID_HERE"; // replace later
+
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -63,8 +71,88 @@ public class DashboardFragment extends Fragment
             startActivity(intent);
         });
 
+        bestEmployeeName = view.findViewById(R.id.best_employee_name);
+        bestEmployeeAtv = view.findViewById(R.id.best_employee_atv);
+        bestEmployeeUpt = view.findViewById(R.id.best_employee_upt);
+        bestEmployeeAttachment = view.findViewById(R.id.best_employee_attachment);
+
+        db = FirebaseFirestore.getInstance();
+
+        loadBestEmployee();
+
+
+
         return view;
     }
+
+    private void loadBestEmployee()
+    {
+
+        db.collection("stores").document(storeId).collection("staffPerformance").get().addOnSuccessListener(query ->
+        {
+                    String topStaffId = null;
+                    double topAtv = -1;
+
+                    for (DocumentSnapshot doc : query.getDocuments())
+                    {
+                        double totalSales = doc.contains("totalSales") ? doc.getDouble("totalSales") : 0;
+                        int totalUnits = doc.contains("totalUnits") ? doc.getLong("totalUnits").intValue() : 0;
+                        int totalTransactions = doc.contains("totalTransactions") ? doc.getLong("totalTransactions").intValue() : 0;
+                        int transactionsWithAddons = doc.contains("transactionsWithAddons") ? doc.getLong("transactionsWithAddons").intValue() : 0;
+
+                        if (totalTransactions == 0) continue;
+
+                        double atv = totalSales / totalTransactions;
+
+                        if (atv > topAtv) {
+                            topAtv = atv;
+                            topStaffId = doc.getId();
+                        }
+                    }
+
+                    if (topStaffId != null) {
+                        loadBestEmployeeKPIs(topStaffId);
+                    }
+                });
+    }
+
+
+    private void loadBestEmployeeKPIs(String staffId)
+    {
+
+        db.collection("stores").document(storeId).collection("staffPerformance").document(staffId).get().addOnSuccessListener(doc ->
+        {
+
+                    double totalSales = doc.getDouble("totalSales");
+                    int totalUnits = doc.getLong("totalUnits").intValue();
+                    int totalTransactions = doc.getLong("totalTransactions").intValue();
+                    int transactionsWithAddons = doc.getLong("transactionsWithAddons").intValue();
+
+                    double atv = totalSales / totalTransactions;
+                    int upt = (int) totalUnits / totalTransactions;
+                    double attachmentRate = ((double) transactionsWithAddons / totalTransactions) * 100;
+
+                    loadStaffName(staffId, atv, upt, attachmentRate);
+                });
+    }
+
+    private void loadStaffName(String staffId, double atv, double upt, double attachmentRate)
+    {
+
+        db.collection("stores").document(storeId).collection("staff").document(staffId).get().addOnSuccessListener(doc ->
+        {
+
+                    String name = doc.contains("name") ? doc.getString("name") : "Unknown";
+                    bestEmployeeName.setText("Employee: " + name);
+                    bestEmployeeAtv.setText("ATV: £" + String.format("%.2f", atv));
+                    bestEmployeeUpt.setText("UPT: " + String.format("%.2f", upt));
+                    bestEmployeeAttachment.setText("Attachment Rate: " + String.format("%.1f", attachmentRate) + "%");
+                });
+    }
+
+
+
+
 
 
 

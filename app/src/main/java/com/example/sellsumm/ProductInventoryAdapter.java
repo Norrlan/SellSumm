@@ -13,13 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductInventoryAdapter extends
-        RecyclerView.Adapter<ProductInventoryAdapter.ProductViewHolder> {
+        RecyclerView.Adapter<ProductInventoryAdapter.ProductViewHolder>
+{
 
-    public interface OnProductClickListener {
+    public interface OnProductClickListener
+    {
         void onClick(ProductModel product);
     }
 
-    public interface OnProductDeleteListener {
+    public interface OnProductDeleteListener
+    {
         void onDelete(ProductModel product);
     }
 
@@ -53,13 +56,11 @@ public class ProductInventoryAdapter extends
 
         holder.productName.setText(product.getProductName());
 
-        // Tap card → edit dialog
-        holder.itemView.setOnClickListener(
-                v -> clickListener.onClick(product));
+        // edit the product
+        holder.itemView.setOnClickListener(v -> clickListener.onClick(product));
 
-        // Tap delete
-        holder.deleteBtn.setOnClickListener(
-                v -> deleteListener.onDelete(product));
+        // delete product
+        holder.deleteBtn.setOnClickListener(v -> deleteListener.onDelete(product));
     }
 
     @Override
@@ -67,7 +68,6 @@ public class ProductInventoryAdapter extends
         return filteredList != null ? filteredList.size() : 0;
     }
 
-    // Called from InventoryFragment search bar
     public void filter(String query)
     {
         filteredList.clear();
@@ -89,7 +89,7 @@ public class ProductInventoryAdapter extends
         notifyDataSetChanged();
     }
 
-    // Called after Firestore adds or updates a product
+
     public void updateList(List<ProductModel> newList)
     {
         productList = newList;

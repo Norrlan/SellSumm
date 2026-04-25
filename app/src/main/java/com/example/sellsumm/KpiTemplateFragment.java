@@ -27,15 +27,17 @@ public class KpiTemplateFragment extends Fragment
     {
         this.kpiCreatedListener = listener;
     }
-
+        // Hardcoded KPI that the supervisor can select from.
     private final List<KPITemplateModel> templates = Arrays.asList
             (
             new KPITemplateModel("", "Average Transaction Value", "Average spend per transactiont", 0, "£", "Higher", "Wekkly"),
-            new KPITemplateModel("", "Products per Transaction", "Average products sold per transaction", 0, "", "Higher", "Weekly"),
+            new KPITemplateModel("", "Units per Transaction", "Average products sold per transaction", 0, "", "Higher", "Weekly"),
             new KPITemplateModel("", "Units Sold", "Total number of products sold", 0, "", "Higher", "Weekly"),
             new KPITemplateModel("", "Attachment Rate", "Percentage of sales with an add-on product", 0, "%", "Higher", "Weekly"),
-            new KPITemplateModel("", "Sales Figure", "sales made on each transaction", 0, "£", "Higher", "Weekly"),
+            new KPITemplateModel("", "Sales Figure", "Sales made weekly or monthly", 0, "£", "Higher", "Weekly"),
             new KPITemplateModel("", "Customers Engagement", "Number of customers attended to", 0, "", "Higher", "Weekly"),
+            new KPITemplateModel("", "Add-on item count", "Number of add-on items sold", 0, "", "Higher", "Monthly"),
+            new KPITemplateModel("", "Default item count", "Number of default items sold", 0, "", "Higher", "Weekly"),
             new KPITemplateModel("", "KPI Score", "Number of KPI Targets achieved", 0, "", "Higher", "Weekly")
 
     );

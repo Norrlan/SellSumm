@@ -25,7 +25,7 @@ public class ManageStaffActivity extends AppCompatActivity
 
     private FirebaseFirestore db;
     private List<StaffModel> staffList = new ArrayList<>();
-    private StaffAdapter adapter;
+    private StaffAnalysisAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,7 +48,7 @@ public class ManageStaffActivity extends AppCompatActivity
         RecyclerView recyclerView = findViewById(R.id.manage_staff_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new StaffAdapter(staffList, (uid, position) -> deleteStaff(uid, position));
+        adapter = new StaffAnalysisAdapter(staffList, (uid, position) -> deleteStaff(uid, position));
 
         recyclerView.setAdapter(adapter);
 
@@ -57,7 +57,8 @@ public class ManageStaffActivity extends AppCompatActivity
     }
 
     // Fetch all users where role == "staff"
-    private void loadStaff() {
+    private void loadStaff()
+    {
         db.collection("users").whereEqualTo("role", "staff").get().addOnSuccessListener(querySnapshot ->
                 {
                     staffList.clear();

@@ -1,64 +1,168 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StaffAnalysisFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class StaffAnalysisFragment extends Fragment {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import java.util.ArrayList;
+import java.util.List;
 
-    public StaffAnalysisFragment() {
-        // Required empty public constructor
-    }
+public class StaffAnalysisFragment extends Fragment
+{
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StaffAnalysisFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StaffAnalysisFragment newInstance(String param1, String param2) {
-        StaffAnalysisFragment fragment = new StaffAnalysisFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    RecyclerView recyclerView;
+    StaffKPIAdapter adapter;
+    List<StaffKPIModel> kpiList = new ArrayList<>();
 
+    FirebaseFirestore db;
+    String staffId;
+
+    Button filterWeekly, filterMonthly, filterAll;
+    List<StaffKPIModel> fullList = new ArrayList<>();
+
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_staff_analysis, container, false);
+
+        db = FirebaseFirestore.getInstance();
+        staffId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        recyclerView = view.findViewById(R.id.staffKpiRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter = new StaffKPIAdapter(getContext(), kpiList);
+        recyclerView.setAdapter(adapter);
+
+        loadSupervisorKpis();
+        adapter.notifyDataSetChanged();
+        calculateKpiScore();
+
+        filterWeekly = view.findViewById(R.id.filterWeekly);
+        filterMonthly = view.findViewById(R.id.filterMonthly);
+        filterAll = view.findViewById(R.id.filterAll);
+
+        filterWeekly.setOnClickListener(v -> applyFilter("Weekly"));
+        filterMonthly.setOnClickListener(v -> applyFilter("Monthly"));
+        filterAll.setOnClickListener(v -> applyFilter("All"));
+
+
+
+        return view;
+    }
+
+    private void loadSupervisorKpis()
+    {
+        db.collection("kpis").get().addOnSuccessListener(query ->
+        {
+                    fullList.clear();
+                    kpiList.clear();
+
+                  for (DocumentSnapshot doc : query.getDocuments())
+                    {
+                        KPITemplateModel template = doc.toObject(KPITemplateModel.class);
+                        loadStaffActualValue(template);
+                    }
+                });
+    }
+
+    private void loadStaffActualValue(KPITemplateModel template) {
+        db.collection("staffPerformance").document(staffId).collection("kpis").document(template.getId()).get().addOnSuccessListener(doc ->
+        {
+                double actual = doc.exists() && doc.contains("actualValue") ? doc.getDouble("actualValue") : 0;
+
+                    StaffKPIModel model = new StaffKPIModel(
+                            template.getName(),
+                            template.getDescription(),
+                            template.getTargetValue(),
+                            actual,
+                            calculateStatus(template.getTargetValue(), actual),
+                            template.getFrequency()
+                    );
+
+                    fullList.add(model);
+                    kpiList.add(model);
+
+                    adapter.notifyDataSetChanged();
+                    calculateKpiScore();
+                });
+    }
+
+    private String calculateStatus(double target, double actual)
+    {
+        if (actual >= target) return "On Track";
+        if (actual >= target * 0.6) return "Keep Pushing";
+        return "Off Track";
+    }
+
+    private void calculateKpiScore()
+    {
+        int totalKpis = kpiList.size();
+        int achieved = 0;
+
+        for (StaffKPIModel kpi : kpiList)
+        {
+            if (kpi.getActualValue() >= kpi.getTargetValue())
+            {
+                achieved++;
+            }
         }
+
+        double ratio = (double) achieved / totalKpis;
+
+        String scoreStatus;
+        if (ratio >= 1.0)
+        {
+            scoreStatus = "On Track";
+        }
+        else if (ratio >= 0.6)
+        {
+            scoreStatus = "Keep Pushing";
+        }
+        else
+        {
+            scoreStatus = "Off Track";
+        }
+
+        // Display kpi score at the top of the Analytics screen
+        Log.d("KPI_SCORE", "Score: " + achieved + "/" + totalKpis + " → " + scoreStatus);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_staff_analysis, container, false);
+    private void applyFilter(String type)
+    {
+        kpiList.clear();
+
+        if (type.equals("All"))
+        {
+            kpiList.addAll(fullList);
+        } else
+        {
+            for (StaffKPIModel kpi : fullList)
+            {
+                if (kpi.getFrequency().equalsIgnoreCase(type))
+                {
+                    kpiList.add(kpi);
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+        calculateKpiScore();
     }
+
+
 }

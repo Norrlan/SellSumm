@@ -1,64 +1,80 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StaffSalesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class StaffSalesFragment extends Fragment {
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class StaffSalesFragment extends Fragment
+{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
+    private MakeSaleAdapter adapter;
 
-    public StaffSalesFragment() {
+    // TEMP: hardcoded IDs until you wire real auth/store selection
+    private String storeId = "STORE_ID_HERE";
+    private String staffId = "STAFF_ID_HERE";
+
+    public static MakeSaleAdapter adapterInstance;
+
+
+    public StaffSalesFragment()
+    {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StaffSalesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StaffSalesFragment newInstance(String param1, String param2) {
-        StaffSalesFragment fragment = new StaffSalesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static StaffSalesFragment newInstance()
+    {
+        return new StaffSalesFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+
+        View view = inflater.inflate(R.layout.fragment_staff_sales, container, false);
+
+        recyclerView = view.findViewById(R.id.sales_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Make sure the shared list is not null
+        if (StaffProductAdapter.draftTransactions == null)
+        {
+            StaffProductAdapter.draftTransactions = new java.util.ArrayList<>();
         }
+
+        // Match MakeSaleAdapter constructor: (Context, List, storeId, staffId)
+        adapter = new MakeSaleAdapter(
+                getContext(),
+                StaffProductAdapter.draftTransactions,
+                storeId,
+                staffId
+        );
+        adapterInstance = adapter;
+        recyclerView.setAdapter(adapter);
+
+        ImageView addBtn = view.findViewById(R.id.salesaddbtn);
+        addBtn.setOnClickListener(v ->
+        {
+            Fragment next = new staffProductsFragment();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.staff_fragment_container, next).addToBackStack(null)
+                    .commit();
+        });
+
+        return view;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_staff_sales, container, false);
+    public void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 }

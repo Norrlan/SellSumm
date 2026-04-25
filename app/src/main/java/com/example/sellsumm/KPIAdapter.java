@@ -23,12 +23,14 @@ public class KPIAdapter extends RecyclerView.Adapter<KPIAdapter.KPIViewHolder>
 
     @NonNull
     @Override
-    public KPIViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public KPIViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull KPIViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull KPIViewHolder holder, int position)
+    {
         KPIModel kpi = kpiList.get(position);
 
         holder.kpiName.setText(kpi.name);
@@ -38,10 +40,14 @@ public class KPIAdapter extends RecyclerView.Adapter<KPIAdapter.KPIViewHolder>
         int progress = (int) ((kpi.actual / kpi.target) * 100);
         holder.kpiProgress.setProgress(progress);
 
-        if (kpi.actual >= kpi.target) {
+        if (kpi.actual >= kpi.target)
+        {
             holder.kpiStatus.setText("On Track");
             holder.kpiStatus.setTextColor(Color.GREEN);
-        } else {
+        }
+
+        else
+        {
             holder.kpiStatus.setText("Keep Pushing");
             holder.kpiStatus.setTextColor(Color.parseColor("#FFA500"));
         }
@@ -52,11 +58,13 @@ public class KPIAdapter extends RecyclerView.Adapter<KPIAdapter.KPIViewHolder>
         return kpiList.size();
     }
 
-    static class KPIViewHolder extends RecyclerView.ViewHolder {
+    static class KPIViewHolder extends RecyclerView.ViewHolder
+    {
         TextView kpiName, kpiActual, kpiTarget, kpiStatus;
         ProgressBar kpiProgress;
 
-        public KPIViewHolder(@NonNull View itemView) {
+        public KPIViewHolder(@NonNull View itemView)
+        {
             super(itemView);
             kpiName = itemView.findViewById(R.id.kpiName);
             kpiActual = itemView.findViewById(R.id.kpiActual);

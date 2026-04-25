@@ -47,7 +47,6 @@ public class LoginScreen extends AppCompatActivity {
         });
 
 
-        // Bind XML fields
         emailField = findViewById(R.id.emailField);
         passwordField = findViewById(R.id.PwdField);
         registerLink = findViewById(R.id.Registerlink);
@@ -67,19 +66,20 @@ public class LoginScreen extends AppCompatActivity {
 
 
         // Create Account link
-        registerLink.setOnClickListener(v -> {
+        registerLink.setOnClickListener(v ->
+        {
             startActivity(new Intent(LoginScreen.this, RegisterScreen.class));
         });
 
         // Forgotten password link
-        //forgottenPwd.setOnClickListener(v -> {
-           // startActivity(new Intent(LoginScreen.this, ForgottenPassword.class));
-       // });
+        forgottenPwd.setOnClickListener(v ->
+        {
+            startActivity(new Intent(LoginScreen.this, ProfileFragment.class));
+       });
 
         // Login button
         loginButton.setOnClickListener(v -> clickedloginbtn());
 
-        // Auto-login if already authenticated + verified
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.isEmailVerified())
         {
@@ -88,7 +88,8 @@ public class LoginScreen extends AppCompatActivity {
     }
 
 
-    private boolean validateInfo(EditText emailField, EditText passwordField) {
+    private boolean validateInfo(EditText emailField, EditText passwordField)
+    {
 
         String email = emailField.getText().toString().trim();
         String password = passwordField.getText().toString().trim();
@@ -142,30 +143,34 @@ public class LoginScreen extends AppCompatActivity {
     }
 
 
-    public void login(String email, String password) {
+    public void login(String email, String password)
+    {
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(authTask -> {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authTask ->
+        {
 
-                    if (!authTask.isSuccessful()) {
+                    if (!authTask.isSuccessful())
+                    {
                         Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     FirebaseUser user = mAuth.getCurrentUser();
 
-                    if (user == null) {
+                    if (user == null)
+                    {
                         Toast.makeText(this, "Unexpected error", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // Email verified → fetch role
+                    //  fetch role
                     fetchUserRoleAndNavigate(user.getUid());
                 });
     }
 
 
-    private void fetchUserRoleAndNavigate(String uid) {
+    private void fetchUserRoleAndNavigate(String uid)
+    {
 
         db.collection("users").document(uid).get()
                 .addOnSuccessListener(doc ->
@@ -197,9 +202,11 @@ public class LoginScreen extends AppCompatActivity {
     }
 
 
-    public void clickedloginbtn() {
+    public void clickedloginbtn()
+    {
 
         if (!validateInfo(emailField, passwordField)) {
+
             return;
         }
 

@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/dashboad_black_card"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/kpi_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ATV"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/kpi_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="£0"
+        android:textSize="14sp"
+        android:textColor="@color/white"/>
+
+    <ProgressBar
+        android:id="@+id/kpi_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_marginTop="6dp"
+        android:max="100"
+        android:progress="0"
+        android:progressBackgroundTint="@color/white"
+        android:progressTint="@color/teal" />
+
+</LinearLayout>

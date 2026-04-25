@@ -1,5 +1,6 @@
 package com.example.sellsumm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -28,9 +29,12 @@ public class StaffMainActivity extends AppCompatActivity
             return insets;
         });
 
+        // open the commissions tab
+        Intent intent = new Intent(StaffMainActivity.this, ViewCommissionActivity.class);
+        startActivity(intent);
+
         bottomNavigation = findViewById(R.id.staff_bottom_nav);
 
-        // Default fragment on start
         loadFragment(new StaffDashboardFragment());
 
         // Handle bottom navigation item selection
@@ -65,7 +69,7 @@ public class StaffMainActivity extends AppCompatActivity
             return loadFragment(selectedFragment);
         });
 
-        // Load default fragment again (safe)
+
         loadFragment(new StaffDashboardFragment());
     }
 

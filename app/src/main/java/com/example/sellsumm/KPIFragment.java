@@ -7,9 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,8 @@ public class KPIFragment extends Fragment
     private TextView emptyStateText;
     private RecyclerView recyclerView;
 
+    private FirebaseFirestore db;
+
     public KPIFragment() {}
 
     @Override
@@ -29,77 +35,91 @@ public class KPIFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_k_p_i, container, false);
 
+        db = FirebaseFirestore.getInstance();
+
         emptyStateText = view.findViewById(R.id.empty_state_text);
         recyclerView   = view.findViewById(R.id.kpi_recycler);
         ImageView btnAdd = view.findViewById(R.id.btn_add_kpi);
 
-        // Set up adapter for created KPI cards
-        adapter = new CreatedKPIAdapter(createdKpis,
-                // Tap KPI card → open edit dialog
+        adapter = new CreatedKPIAdapter(
+                createdKpis,
                 kpi -> openEditDialog(kpi),
-                // Tap delete button
-                kpi ->
-                {
-                    createdKpis.remove(kpi);
-                    adapter.notifyDataSetChanged();
-                    updateEmptyState();
-                    // TODO: delete from Firestore
-                }
+                kpi -> deleteKpiFromFirestore(kpi)
         );
 
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        // + button → navigate to KPI Templates screen
-        btnAdd.setOnClickListener(v ->
+        btnAdd.setOnClickListener(v -> openTemplateScreen());
+
+        loadKpisFromFirestore();
+
+        return view;
+    }
+
+    private void openTemplateScreen()
+    {
+        KpiTemplateFragment templateFragment = new KpiTemplateFragment();
+
+        templateFragment.setOnKpiCreatedListener(newKpi ->
         {
-            KpiTemplateFragment templateFragment = new KpiTemplateFragment();
+            saveKpiToFirestore(newKpi);
+        });
 
-            // Receive saved KPI back from template screen
-            templateFragment.setOnKpiCreatedListener(newKpi ->
-            {
-                createdKpis.add(newKpi);
-                adapter.notifyDataSetChanged();
-                updateEmptyState();
-                // TODO: save to Firestore
-            });
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, templateFragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
-            // + button → navigate to KPI Templates screen
-            btnAdd.setOnClickListener(view1 ->
-            {
-                KpiTemplateFragment templateFragment1 = new KpiTemplateFragment();
-
-                templateFragment.setOnKpiCreatedListener(newKpi -> {
-                    createdKpis.add(newKpi);
+    private void saveKpiToFirestore(KPITemplateModel kpi)
+    {
+        db.collection("kpis").document(kpi.getId()).set(kpi).addOnSuccessListener(unused ->
+                {
+                    createdKpis.add(kpi);
                     adapter.notifyDataSetChanged();
                     updateEmptyState();
                 });
+    }
 
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, templateFragment)
-                        .addToBackStack(null)
-                        .commit();
-            });
-        });
+    private void loadKpisFromFirestore()
+    {
+        db.collection("kpis").get().addOnSuccessListener(query ->
+        {
+                    createdKpis.clear();
+                    for (DocumentSnapshot doc : query.getDocuments())
+                    {
+                        KPITemplateModel kpi = doc.toObject(KPITemplateModel.class);
+                        createdKpis.add(kpi);
+                    }
+                    adapter.notifyDataSetChanged();
+                    updateEmptyState();
+                });
+    }
 
-        updateEmptyState();
-        return view;
+    private void deleteKpiFromFirestore(KPITemplateModel kpi)
+    {
+        db.collection("kpis").document(kpi.getId()).delete().addOnSuccessListener(unused -> {
+                    createdKpis.remove(kpi);
+                    adapter.notifyDataSetChanged();
+                    updateEmptyState();
+                });
     }
 
     private void openEditDialog(KPITemplateModel kpi)
     {
         KpiConfigDialog dialog = KpiConfigDialog.newInstanceForEdit(kpi);
 
-        dialog.setSaveListener(updatedKpi ->
-        {
-            int index = createdKpis.indexOf(kpi);
-            if (index >= 0) {
-                createdKpis.set(index, updatedKpi);
-                adapter.notifyDataSetChanged();
-                // TODO: update in Firestore
-            }
+        dialog.setSaveListener(updatedKpi -> {
+            db.collection("kpis").document(updatedKpi.getId()).set(updatedKpi).addOnSuccessListener(unused ->
+            {
+                        int index = createdKpis.indexOf(kpi);
+                        if (index >= 0) {
+                            createdKpis.set(index, updatedKpi);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
         });
 
         dialog.show(getChildFragmentManager(), "EditKpiDialog");
@@ -108,9 +128,7 @@ public class KPIFragment extends Fragment
     private void updateEmptyState()
     {
         boolean isEmpty = createdKpis.isEmpty();
-        emptyStateText.setVisibility(
-                isEmpty ? View.VISIBLE : View.GONE);
-        recyclerView.setVisibility(
-                isEmpty ? View.GONE : View.VISIBLE);
+        emptyStateText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 }

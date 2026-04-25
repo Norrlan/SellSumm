@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/nav_kpi"
-        android:title="KPIs"
+        android:title="Transaction"
         android:icon="@drawable/kpi_icon" />
 
     <item

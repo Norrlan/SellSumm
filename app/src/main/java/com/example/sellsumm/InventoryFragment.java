@@ -49,7 +49,6 @@ public class InventoryFragment extends Fragment
         ImageView btnAdd = view.findViewById(R.id.imageView);
         TextInputEditText searchBar = view.findViewById(R.id.Search_bar);
 
-        // Adapter setup for Tap product card → open edit dialog and the delete button
         adapter = new ProductInventoryAdapter(productList, product -> openProductDialog(product), product -> deleteProduct(product)
         );
 
@@ -80,14 +79,43 @@ public class InventoryFragment extends Fragment
     }
 
     // Load all products from Firestore
-    private void loadProducts() {db.collection("products").get().addOnSuccessListener(querySnapshot -> {productList.clear();
-        for (QueryDocumentSnapshot doc : querySnapshot)
+    private void loadProducts()
+    {
+        db.collection("products").get().addOnSuccessListener(querySnapshot ->
         {
-            ProductModel product = new ProductModel(doc.getString("productId"),doc.getDouble("price") != null ? doc.getDouble("price") : 0, doc.getString("productName"), doc.getString("productCategory"), doc.getString("productType"));
-            productList.add(product);
-        } adapter.updateList(productList); updateEmptyState();
-                }).addOnFailureListener(e -> Log.e(TAG, "Failed to load products: " + e.getMessage()));
+            productList.clear();
+
+                for (QueryDocumentSnapshot doc : querySnapshot)
+                    {
+
+                        String id = doc.getString("productId");
+                        double price = doc.getDouble("price") != null ? doc.getDouble("price") : 0;
+                        String name = doc.getString("productName");
+                        String category = doc.getString("productCategory");
+                        String type = doc.getString("productType");
+
+                        // Derive isAddon from productType
+                        boolean isAddon = type != null && type.equalsIgnoreCase("Add-on");
+
+                        ProductModel product = new ProductModel(
+                                id,
+                                price,
+                                name,
+                                category,
+                                type,
+                                isAddon
+                        );
+
+                        productList.add(product);
+                    }
+
+                    adapter.updateList(productList);
+                    updateEmptyState();
+                })
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to load products: " + e.getMessage()));
     }
+
 
     // Open dialog for add or edit
     private void openProductDialog(ProductModel existingProduct)
@@ -136,8 +164,15 @@ public class InventoryFragment extends Fragment
     //Show or hide empty state
     private void updateEmptyState()
     {
-        boolean isEmpty = productList.isEmpty();
-        emptyStateText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        //boolean isEmpty = productList.isEmpty();
+        //emptyStateText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        //recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        if (productList.isEmpty()) {
+            emptyStateText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyStateText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 }

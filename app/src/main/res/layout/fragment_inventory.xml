@@ -87,13 +87,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_results_recycler"
         android:layout_width="393dp"
-        android:layout_height="539dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:padding="12dp"
-        android:paddingTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:clipToPadding="false"
+
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,14 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
 
- */
-public class ProfileFragment extends Fragment {
-
+public class ProfileFragment extends Fragment
+{
 
 
-    // TODO: Rename and change types of parameters
+
 
     public ProfileFragment()
     {

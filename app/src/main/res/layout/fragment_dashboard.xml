@@ -42,14 +42,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- ROW 1 -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="91dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <!-- Sales Figure -->
+
             <LinearLayout
                 android:id="@+id/unit_stat_1"
                 android:layout_width="138dp"
@@ -80,7 +80,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- ATV -->
+
             <LinearLayout
                 android:id="@+id/unit_stat_2"
                 android:layout_width="134dp"
@@ -113,14 +113,14 @@
 
         </LinearLayout>
 
-        <!-- ROW 2 -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="99dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <!-- Units per Transaction -->
+
 
 
             <LinearLayout
@@ -194,51 +194,78 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:text="Overview"
+        android:text="Best employee Stats"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/kpi_cards_container" />
 
-    <FrameLayout
-        android:id="@+id/store_revenue_graph"
-        android:layout_width="403dp"
-        android:layout_height="185dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="35px"
-        android:layout_marginEnd="4dp"
-        android:background="@color/black"
+
+    <LinearLayout
+        android:id="@+id/best_employee_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/dashboad_black_card"
+        android:orientation="vertical"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/revenue_overview_label">
+        app:layout_constraintTop_toBottomOf="@id/revenue_overview_label">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/salesBarChart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="15px"
-            android:padding="8px" />
-    </FrameLayout>
+        <TextView
+            android:id="@+id/best_employee_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name: "
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
-    <!-- Sales + Manage Staff Buttons -->
+        <TextView
+            android:id="@+id/best_employee_atv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ATV: £0"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/best_employee_upt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UPT: 0"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/best_employee_attachment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attachment Rate: 0%"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="407dp"
         android:layout_height="59dp"
         android:layout_marginTop="44dp"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/store_revenue_graph">
+        app:layout_constraintTop_toBottomOf="@+id/best_employee_card">
 
         <!-- Sales Tab -->
+
+        <!-- Manage Staff -->
         <LinearLayout
             android:id="@+id/sales_tab"
             android:layout_width="114dp"
             android:layout_height="50dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
+            android:layout_marginEnd="30dp"
             android:background="@drawable/dasboard_small_stats"
             android:gravity="center_vertical"
             android:orientation="vertical"
@@ -253,7 +280,6 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
-        <!-- Manage Staff -->
         <LinearLayout
             android:id="@+id/staff_member_tab"
             android:layout_width="wrap_content"
