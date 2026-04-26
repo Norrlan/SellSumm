@@ -146,13 +146,15 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/commissionValue"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/transactionValue"
+                    android:layout_width="19dp"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+
             </LinearLayout>
 
         </GridLayout>
@@ -344,56 +346,55 @@
 
         </LinearLayout>
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:columnCount="2"
-            android:rowCount="2"
-            android:useDefaultMargins="true">
-
+        <!-- Target Sales -->
+        <LinearLayout
+            android:layout_width="285dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="45dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:id="@+id/viewCommissioncard"
+                android:layout_width="239dp"
+                android:layout_height="104dp"
                 android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:background="@drawable/dashboad_black_card"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/dasboard_small_stats"
                 android:gravity="center"
-                android:id="@+id/commissionCard"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Commission"
+                    android:text="Commission Type: Fixed"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:background="@drawable/dashboad_black_card"
-                android:gravity="center"
-                android:id="@+id/kpiscore_card"
-                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/viewRateValue"
+                    android:layout_width="78dp"
                     android:layout_height="wrap_content"
-                    android:text="KPI Score"
+                    android:text="Rate : "
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/commissionValue"
+                    android:layout_width="172dp"
+                    android:layout_height="wrap_content"
+                    android:text="Amount (£): "
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
-            </LinearLayout>
 
-        </GridLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
 
 
 

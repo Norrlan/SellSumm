@@ -9,27 +9,52 @@
     tools:context=".ManageStaffActivity">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="135dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="64dp"
+        android:id="@+id/title_manage_users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="36dp"
         android:text="Manage Users"
         android:textColor="@color/teal"
-        android:textSize="18sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ⭐ Store Code Display -->
+    <TextView
+        android:id="@+id/store_code_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Store Code:"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_manage_users" />
+
+    <!-- will be replaced in Java -->
+    <TextView
+        android:id="@+id/store_code_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="..."
+    android:textColor="@color/teal"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    app:layout_constraintStart_toEndOf="@id/store_code_label"
+    app:layout_constraintTop_toTopOf="@id/store_code_label" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/manage_staff_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="1dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/store_code_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

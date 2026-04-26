@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="@color/screen_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/screen_background"
     tools:context=".LoginScreen">
 
+    <!-- Header image -->
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/headerImage"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:scaleType="centerCrop"
@@ -18,90 +19,97 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Logo -->
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/logo"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="@id/imageView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:srcCompat="@drawable/sellsumm_logo"
+        app:layout_constraintTop_toTopOf="@id/headerImage"
+        app:layout_constraintBottom_toBottomOf="@id/headerImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageView6"
-        app:layout_constraintVertical_bias="0.16"
-        app:srcCompat="@drawable/sellsumm_logo" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
 
+    <!-- App name -->
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:text="SellSumm"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
 
+    <!-- Tagline -->
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tagline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="Flexible Retail Tracking System"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
 
+    <!-- Form container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/formContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:background="@android:color/white"
         android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp">
 
+        <!-- EMAIL -->
         <TextView
             android:id="@+id/emailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="EMAIL"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/emailField"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_input_field"
             android:hint="Enter your email address"
+            android:inputType="textEmailAddress"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailLabel" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- PASSWORD -->
         <TextView
             android:id="@+id/passwordLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="PASSWORD"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailField" />
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/emailField"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/PwdField"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_input_field"
             android:hint="Enter your password"
             android:inputType="textPassword"
@@ -109,76 +117,94 @@
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordLabel" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- STORE CODE (only used for staff login) -->
+        <TextView
+            android:id="@+id/storeCodeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STORE CODE"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/PwdField"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/StorecodeField"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_input_field"
+            android:hint="Enter the store code"
+            android:inputType="text"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/storeCodeLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- ROLE -->
         <TextView
             android:id="@+id/roleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="ROLE"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/PwdField" />
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/StorecodeField"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Spinner
             android:id="@+id/spinner2"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background= "#e0e0e0"
+            android:layout_height="48dp"
+            android:background="#e0e0e0"
+            android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@id/roleLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/Registerlink"
-        android:layout_width="111dp"
-        android:layout_height="17dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="Create Account"
-        android:textColor="@color/teal"
-        app:layout_constraintBottom_toTopOf="@+id/forgotten_Pwd"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+    <!-- Sign In button -->
     <Button
         android:id="@+id/button3"
-        android:layout_width="118dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="140dp"
-        android:layout_marginBottom="52dp"
-        android:backgroundTint="@color/teal"
-        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
         android:text="Sign In"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/loginText"
+        android:backgroundTint="@color/teal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/formContainer"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Create Account -->
     <TextView
-        android:id="@+id/loginText"
-        android:layout_width="146dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="100dp"
-        android:text="Dont have an account?"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/Registerlink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:textColor="@color/teal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/button3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Forgotten password -->
     <TextView
         android:id="@+id/forgotten_Pwd"
-        android:layout_width="139dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Forgotten password"
         android:textColor="@color/teal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/Registerlink"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

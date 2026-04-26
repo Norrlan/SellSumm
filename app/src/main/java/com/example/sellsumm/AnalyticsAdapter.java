@@ -18,7 +18,8 @@ public class AnalyticsAdapter extends RecyclerView.Adapter<AnalyticsAdapter.View
     private Context context;
     private List<AnalyticKPIModel> kpiList;
 
-    public AnalyticsAdapter(Context context, List<AnalyticKPIModel> kpiList) {
+    public AnalyticsAdapter(Context context, List<AnalyticKPIModel> kpiList)
+    {
         this.context = context;
         this.kpiList = kpiList;
     }
@@ -31,7 +32,8 @@ public class AnalyticsAdapter extends RecyclerView.Adapter<AnalyticsAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
+    {
 
         AnalyticKPIModel kpi = kpiList.get(position);
 

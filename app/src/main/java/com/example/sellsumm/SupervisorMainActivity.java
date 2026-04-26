@@ -11,79 +11,76 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class SupervisorMainActivity extends AppCompatActivity
-{
+public class SupervisorMainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
+    public static String storeId; // accessible to all fragments
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_supervisor_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.supervisor_main), (v, insets) ->
-        {
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.supervisor_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // ⭐ Get storeId from LoginScreen
+        storeId = getIntent().getStringExtra("storeId");
 
-        // Bottom navigation setup
+        if (storeId == null) {
+            // fallback safety
+            storeId = "UNKNOWN";
+        }
+
         bottomNav = findViewById(R.id.supervisor_bottom_nav);
-        // default fragment on start
-        loadFragment(new DashboardFragment());
 
-        // Handle bottom navigation item selection.
-        bottomNav.setOnItemSelectedListener(item ->
-        {
+        // Load default fragment WITH storeId
+        loadFragment(DashboardFragment.newInstance(storeId));
+
+        bottomNav.setOnItemSelectedListener(item -> {
 
             Fragment selectedFragment = null;
 
-            if (item.getItemId() == R.id.nav_dashboard)
-            {
-                selectedFragment = new DashboardFragment();
+            if (item.getItemId() == R.id.nav_dashboard) {
+                selectedFragment = DashboardFragment.newInstance(storeId);
             }
-            else if (item.getItemId() == R.id.nav_analytics)
-            {
-                selectedFragment = new AnalyticsFragment();
+            else if (item.getItemId() == R.id.nav_analytics) {
+                selectedFragment = AnalyticsFragment.newInstance(storeId);
             }
-            else if (item.getItemId() == R.id.nav_kpi)
-            {
-                selectedFragment = new KPIFragment();
+            else if (item.getItemId() == R.id.nav_kpi) {
+                selectedFragment = KPIFragment.newInstance(storeId);
             }
-            else if (item.getItemId() == R.id.nav_inventory)
-            {
-                selectedFragment = new InventoryFragment();
+            else if (item.getItemId() == R.id.nav_inventory) {
+                selectedFragment = InventoryFragment.newInstance(storeId);
             }
-            else if (item.getItemId() == R.id.nav_profile)
-            {
-                selectedFragment = new ProfileFragment();
+            else if (item.getItemId() == R.id.nav_profile) {
+                selectedFragment = ProfileFragment.newInstance(storeId);
             }
-            // Replace the current fragment with the selected one.
 
             return loadFragment(selectedFragment);
         });
-
-
-        // Load default fragment
-        loadFragment(new DashboardFragment());
     }
 
-    private boolean loadFragment(Fragment fragment)
-    {
+    private boolean loadFragment(Fragment fragment) {
         if (fragment == null) return false;
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
                 .commit();
 
         return true;
     }
 
     public void openFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null)
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
                 .commit();
     }
-
 }

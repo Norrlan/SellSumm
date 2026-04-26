@@ -18,8 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KPIFragment extends Fragment
-{
+public class KPIFragment extends Fragment {
 
     private final List<KPITemplateModel> createdKpis = new ArrayList<>();
     private CreatedKPIAdapter adapter;
@@ -27,12 +26,31 @@ public class KPIFragment extends Fragment
     private RecyclerView recyclerView;
 
     private FirebaseFirestore db;
+    private String storeId; // ⭐ store-aware
 
     public KPIFragment() {}
 
+    // ⭐ Correct newInstance() for KPIFragment
+    public static KPIFragment newInstance(String storeId) {
+        KPIFragment fragment = new KPIFragment();
+        Bundle args = new Bundle();
+        args.putString("storeId", storeId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // ⭐ Read storeId from arguments
+        if (getArguments() != null) {
+            storeId = getArguments().getString("storeId");
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_k_p_i, container, false);
 
         db = FirebaseFirestore.getInstance();
@@ -57,12 +75,10 @@ public class KPIFragment extends Fragment
         return view;
     }
 
-    private void openTemplateScreen()
-    {
+    private void openTemplateScreen() {
         KpiTemplateFragment templateFragment = new KpiTemplateFragment();
 
-        templateFragment.setOnKpiCreatedListener(newKpi ->
-        {
+        templateFragment.setOnKpiCreatedListener(newKpi -> {
             saveKpiToFirestore(newKpi);
         });
 
@@ -73,23 +89,29 @@ public class KPIFragment extends Fragment
                 .commit();
     }
 
-    private void saveKpiToFirestore(KPITemplateModel kpi)
-    {
-        db.collection("kpis").document(kpi.getId()).set(kpi).addOnSuccessListener(unused ->
-                {
+    // ⭐ Save KPI under the correct store
+    private void saveKpiToFirestore(KPITemplateModel kpi) {
+        db.collection("stores")
+                .document(storeId)
+                .collection("kpis")
+                .document(kpi.getId())
+                .set(kpi)
+                .addOnSuccessListener(unused -> {
                     createdKpis.add(kpi);
                     adapter.notifyDataSetChanged();
                     updateEmptyState();
                 });
     }
 
-    private void loadKpisFromFirestore()
-    {
-        db.collection("kpis").get().addOnSuccessListener(query ->
-        {
+    // ⭐ Load KPIs from the correct store
+    private void loadKpisFromFirestore() {
+        db.collection("stores")
+                .document(storeId)
+                .collection("kpis")
+                .get()
+                .addOnSuccessListener(query -> {
                     createdKpis.clear();
-                    for (DocumentSnapshot doc : query.getDocuments())
-                    {
+                    for (DocumentSnapshot doc : query.getDocuments()) {
                         KPITemplateModel kpi = doc.toObject(KPITemplateModel.class);
                         createdKpis.add(kpi);
                     }
@@ -98,22 +120,30 @@ public class KPIFragment extends Fragment
                 });
     }
 
-    private void deleteKpiFromFirestore(KPITemplateModel kpi)
-    {
-        db.collection("kpis").document(kpi.getId()).delete().addOnSuccessListener(unused -> {
+    // ⭐ Delete KPI from the correct store
+    private void deleteKpiFromFirestore(KPITemplateModel kpi) {
+        db.collection("stores")
+                .document(storeId)
+                .collection("kpis")
+                .document(kpi.getId())
+                .delete()
+                .addOnSuccessListener(unused -> {
                     createdKpis.remove(kpi);
                     adapter.notifyDataSetChanged();
                     updateEmptyState();
                 });
     }
 
-    private void openEditDialog(KPITemplateModel kpi)
-    {
+    private void openEditDialog(KPITemplateModel kpi) {
         KpiConfigDialog dialog = KpiConfigDialog.newInstanceForEdit(kpi);
 
         dialog.setSaveListener(updatedKpi -> {
-            db.collection("kpis").document(updatedKpi.getId()).set(updatedKpi).addOnSuccessListener(unused ->
-            {
+            db.collection("stores")
+                    .document(storeId)
+                    .collection("kpis")
+                    .document(updatedKpi.getId())
+                    .set(updatedKpi)
+                    .addOnSuccessListener(unused -> {
                         int index = createdKpis.indexOf(kpi);
                         if (index >= 0) {
                             createdKpis.set(index, updatedKpi);
@@ -125,8 +155,7 @@ public class KPIFragment extends Fragment
         dialog.show(getChildFragmentManager(), "EditKpiDialog");
     }
 
-    private void updateEmptyState()
-    {
+    private void updateEmptyState() {
         boolean isEmpty = createdKpis.isEmpty();
         emptyStateText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);

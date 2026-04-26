@@ -39,13 +39,14 @@ public class LoginScreen extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) ->
-        {
+        // IMPORTANT: force logout so login screen is always fresh
+        mAuth.signOut();
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
 
         emailField = findViewById(R.id.emailField);
         passwordField = findViewById(R.id.PwdField);
@@ -53,40 +54,23 @@ public class LoginScreen extends AppCompatActivity {
         forgottenPwd = findViewById(R.id.forgotten_Pwd);
         loginButton = findViewById(R.id.button3);
 
-        Spinner spinner = findViewById(R.id.spinner2);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                R.layout.spinner_text,
-                new String[]{"staff", "supervisor"}
+        registerLink.setOnClickListener(v ->
+                startActivity(new Intent(LoginScreen.this, RegisterScreen.class))
         );
 
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spinner.setAdapter(adapter);
-
-
-        // Create Account link
-        registerLink.setOnClickListener(v ->
-        {
-            startActivity(new Intent(LoginScreen.this, RegisterScreen.class));
+        forgottenPwd.setOnClickListener(v -> {
+            String email = emailField.getText().toString().trim();
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Enter your email first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener(a -> Toast.makeText(this, "Reset link sent", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
 
-        // Forgotten password link
-        forgottenPwd.setOnClickListener(v ->
-        {
-            startActivity(new Intent(LoginScreen.this, ProfileFragment.class));
-       });
-
-        // Login button
         loginButton.setOnClickListener(v -> clickedloginbtn());
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null && currentUser.isEmailVerified())
-        {
-            fetchUserRoleAndNavigate(currentUser.getUid());
-        }
     }
-
 
     private boolean validateInfo(EditText emailField, EditText passwordField)
     {

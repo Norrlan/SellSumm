@@ -8,29 +8,30 @@
     android:background="@color/screen_background"
     tools:context=".RegisterScreen">
 
+    <!-- Header image -->
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/store_background" />
 
+    <!-- Logo -->
     <ImageView
         android:id="@+id/imageView8"
         android:layout_width="80dp"
         android:layout_height="80dp"
         app:layout_constraintBottom_toBottomOf="@id/imageView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/imageView6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.16"
         app:srcCompat="@drawable/sellsumm_logo" />
 
+    <!-- App name -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -40,11 +41,11 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintTop_toBottomOf="@id/imageView8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Tagline -->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -53,82 +54,87 @@
         android:text="Flexible Retail Tracking System"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Form container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/formContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="10dp"
         android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2">
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- EMAIL -->
         <TextView
             android:id="@+id/emailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="EMAIL"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/emailField"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:background="@drawable/bg_input_field"
             android:hint="Enter your email address"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:inputType="textEmailAddress"
+            app:layout_constraintTop_toBottomOf="@id/emailLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailLabel" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- FULL NAME -->
         <TextView
             android:id="@+id/fullNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:text="FULL NAME"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailField" />
+            app:layout_constraintTop_toBottomOf="@id/emailField"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/fullnameField"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:background="@drawable/bg_input_field"
             android:hint="Enter your full name"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fullNameLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fullNameLabel" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- PASSWORD -->
         <TextView
             android:id="@+id/passwordLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:text="PASSWORD"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fullnameField" />
+            app:layout_constraintTop_toBottomOf="@id/fullnameField"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/PwdField"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:background="@drawable/bg_input_field"
             android:hint="Enter your password"
             android:inputType="textPassword"
@@ -136,42 +142,71 @@
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordLabel" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- STORE NAME / STORE CODE (same field, role-dependent) -->
+        <TextView
+            android:id="@+id/storeNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="STORE NAME"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/PwdField"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/storeNameField"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_field"
+            android:hint="Enter the name of the store"
+            android:inputType="textCapWords"
+            android:paddingStart="16dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/storeNameLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- ROLE -->
         <TextView
             android:id="@+id/roleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:text="ROLE"
             android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/PwdField" />
+            app:layout_constraintTop_toBottomOf="@id/storeNameField"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background= "#e0e0e0"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="#e0e0e0"
+            app:layout_constraintTop_toBottomOf="@id/roleLabel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/roleLabel" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Bottom row -->
     <LinearLayout
         android:id="@+id/bottomRow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="52dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/haveAcca"
@@ -202,6 +237,5 @@
             android:textColor="@color/teal" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,12 +25,27 @@ public class AnalyticsFragment extends Fragment {
     private List<AnalyticKPIModel> kpiList;
 
     private FirebaseFirestore db;
-    private String storeId = "STORE_ID_HERE"; // Replace later
+    private String storeId; // ⭐ no default
 
     public AnalyticsFragment() {}
 
-    public static AnalyticsFragment newInstance() {
-        return new AnalyticsFragment();
+    // ⭐ Correct newInstance method
+    public static AnalyticsFragment newInstance(String storeId) {
+        AnalyticsFragment fragment = new AnalyticsFragment();
+        Bundle args = new Bundle();
+        args.putString("storeId", storeId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // ⭐ Read storeId from arguments
+        if (getArguments() != null) {
+            storeId = getArguments().getString("storeId");
+        }
     }
 
     @Override
@@ -54,7 +69,6 @@ public class AnalyticsFragment extends Fragment {
     }
 
     private void loadAnalytics() {
-
         db.collection("stores")
                 .document(storeId)
                 .collection("staffPerformance")
@@ -82,8 +96,7 @@ public class AnalyticsFragment extends Fragment {
 
                     double atv = totalTransactions == 0 ? 0 : totalSales / totalTransactions;
                     double upt = totalTransactions == 0 ? 0 : (double) totalUnits / totalTransactions;
-                    double attachmentRate = totalTransactions == 0 ? 0 :
-                            ((double) addonCount / totalTransactions) * 100;
+                    double attachmentRate = totalTransactions == 0 ? 0 : ((double) addonCount / totalTransactions) * 100;
 
                     // Add KPIs
                     addKPI("ATV", "£" + format(atv), atv, 50);

@@ -38,10 +38,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileCard"
-        android:layout_width="275dp"
-        android:layout_height="315dp"
-        android:padding="24dp"
+        android:layout_width="278dp"
+        android:layout_height="444dp"
         android:background="@color/white"
+        android:padding="24dp"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
             android:layout_width="213dp"
             android:layout_height="48dp"
             android:layout_marginStart="3dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="172dp"
             android:background="@drawable/bg_input_field"
             android:hint="Email"
             android:inputType="textEmailAddress"
@@ -66,19 +66,45 @@
             android:textColorHint="@color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.818"
+            app:layout_constraintHorizontal_bias="0.428"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/profile_store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Store Name"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/profile_store_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="28dp"
+            android:text="Store Code"
+            android:textColor="@color/teal"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_store_name" />
 
         <Button
             android:id="@+id/resetPasswordBtn"
             android:layout_width="213dp"
             android:layout_height="48dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@color/teal"
             android:text="Reset Password"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.222"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/EmailAddressField" />
 
@@ -86,12 +112,12 @@
             android:id="@+id/logoutBtn"
             android:layout_width="213dp"
             android:layout_height="48dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@color/teal"
             android:text="Logout"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.512"
+            app:layout_constraintHorizontal_bias="0.222"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/resetPasswordBtn" />
 
@@ -100,7 +126,7 @@
             android:layout_width="117dp"
             android:layout_height="20dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="116dp"
             android:text="Email Address"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"

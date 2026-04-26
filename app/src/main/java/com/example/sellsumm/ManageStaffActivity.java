@@ -2,6 +2,7 @@ package com.example.sellsumm;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -27,6 +28,8 @@ public class ManageStaffActivity extends AppCompatActivity
     private List<StaffModel> staffList = new ArrayList<>();
     private StaffAnalysisAdapter adapter;
 
+    private String storeId; // ⭐ store-aware
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -34,9 +37,9 @@ public class ManageStaffActivity extends AppCompatActivity
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_manage_staff);
 
+
         ViewCompat.setOnApplyWindowInsetsListener(
-                findViewById(R.id.main), (v, insets) ->
-                {
+                findViewById(R.id.main), (v, insets) -> {
                     Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
                     v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                     return insets;
@@ -44,65 +47,90 @@ public class ManageStaffActivity extends AppCompatActivity
 
         db = FirebaseFirestore.getInstance();
 
-        // RecyclerView setup
+        // ⭐ Get storeId from DashboardFragment
+        storeId = getIntent().getStringExtra("storeId");
+
+        if (storeId == null) {
+            Toast.makeText(this, "Store ID missing", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         RecyclerView recyclerView = findViewById(R.id.manage_staff_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new StaffAnalysisAdapter(staffList, (uid, position) -> deleteStaff(uid, position));
+        TextView storeCodeValue = findViewById(R.id.store_code_value);
+        storeCodeValue.setText(storeId);
 
+
+        adapter = new StaffAnalysisAdapter(staffList, (uid, position) -> deleteStaff(uid, position));
         recyclerView.setAdapter(adapter);
 
-        // Load staff from Firestore
         loadStaff();
     }
 
-    // Fetch all users where role == "staff"
-    private void loadStaff()
-    {
-        db.collection("users").whereEqualTo("role", "staff").get().addOnSuccessListener(querySnapshot ->
-                {
+    // ⭐ Load staff ONLY from this store
+    private void loadStaff() {
+        db.collection("stores")
+                .document(storeId)
+                .collection("staff")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+
                     staffList.clear();
 
-                    for (QueryDocumentSnapshot doc : querySnapshot)
-                    {
-                        StaffModel staff = new StaffModel(doc.getString("uid"), doc.getString("fullName"), doc.getString("email"), doc.getString("role"));
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+
+                        String uid = doc.getId();
+                        String name = doc.getString("name");
+                        String email = doc.getString("email");
+
+                        StaffModel staff = new StaffModel(uid, name, email, "staff");
                         staffList.add(staff);
                     }
 
                     adapter.notifyDataSetChanged();
 
-                    if (staffList.isEmpty())
-                    {
-                        Toast.makeText(this, "No staff accounts found", Toast.LENGTH_SHORT).show();
+                    if (staffList.isEmpty()) {
+                        Toast.makeText(this, "No staff found for this store", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e ->
-                {
+                .addOnFailureListener(e -> {
                     Log.e(TAG, "Failed to load staff: " + e.getMessage());
                     Toast.makeText(this, "Failed to load staff", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    // Delete staff from Firestore
-    private void deleteStaff(String uid, int position)
-    {
-        if (uid == null || uid.isEmpty())
-        {
-            Toast.makeText(this, "Cannot delete: invalid user", Toast.LENGTH_SHORT).show();
+    // ⭐ Delete staff from ALL correct locations
+    private void deleteStaff(String uid, int position) {
+
+        if (uid == null || uid.isEmpty()) {
+            Toast.makeText(this, "Invalid staff ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("users").document(uid).delete().addOnSuccessListener(aVoid ->
-                {
-                    staffList.remove(position);
-                    adapter.notifyItemRemoved(position);
-                    adapter.notifyItemRangeChanged(position, staffList.size());
-                    Toast.makeText(this, "Staff account removed", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e ->
-                {
-                    Log.e(TAG, "Delete failed: " + e.getMessage());
-                    Toast.makeText(this, "Failed to delete staff", Toast.LENGTH_SHORT).show();
-                });
+        // 1️⃣ Delete from users collection
+        db.collection("users").document(uid).delete();
+
+        // 2️⃣ Delete from store staff list
+        db.collection("stores")
+                .document(storeId)
+                .collection("staff")
+                .document(uid)
+                .delete();
+
+        // 3️⃣ Delete staff performance
+        db.collection("stores")
+                .document(storeId)
+                .collection("staffPerformance")
+                .document(uid)
+                .delete();
+
+        // Update UI
+        staffList.remove(position);
+        adapter.notifyItemRemoved(position);
+        adapter.notifyItemRangeChanged(position, staffList.size());
+
+        Toast.makeText(this, "Staff removed", Toast.LENGTH_SHORT).show();
     }
 }
