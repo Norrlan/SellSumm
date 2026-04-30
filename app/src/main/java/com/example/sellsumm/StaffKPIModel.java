@@ -29,4 +29,7 @@ public class StaffKPIModel {
     public String getStatus() { return status; }
 
     public String getFrequency() { return frequency; }
+
+    public void setActualValue(double actualValue) { this.actualValue = actualValue; }
+    public void setStatus(String status) { this.status = status; }
 }

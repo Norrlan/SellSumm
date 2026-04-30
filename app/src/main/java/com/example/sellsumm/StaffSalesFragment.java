@@ -11,15 +11,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class StaffSalesFragment extends Fragment
 {
 
     private RecyclerView recyclerView;
     private MakeSaleAdapter adapter;
 
-    // TEMP: hardcoded IDs until you wire real auth/store selection
-    private String storeId = "STORE_ID_HERE";
-    private String staffId = "STAFF_ID_HERE";
+    private String storeId;
+    private String staffId;
 
     public static MakeSaleAdapter adapterInstance;
 
@@ -29,9 +30,27 @@ public class StaffSalesFragment extends Fragment
         // Required empty public constructor
     }
 
-    public static StaffSalesFragment newInstance()
+    public static StaffSalesFragment newInstance(String storeId)
     {
-        return new StaffSalesFragment();
+        StaffSalesFragment fragment = new StaffSalesFragment();
+        Bundle args = new Bundle();
+        args.putString("storeId", storeId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            storeId = getArguments().getString("storeId");
+        }
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            staffId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @Override
@@ -62,7 +81,7 @@ public class StaffSalesFragment extends Fragment
         ImageView addBtn = view.findViewById(R.id.salesaddbtn);
         addBtn.setOnClickListener(v ->
         {
-            Fragment next = new staffProductsFragment();
+            Fragment next = staffProductsFragment.newInstance(storeId);
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.staff_fragment_container, next).addToBackStack(null)
                     .commit();
         });

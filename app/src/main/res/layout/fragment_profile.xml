@@ -8,16 +8,15 @@
     tools:context=".ProfileFragment"
     >
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="416dp"
-        android:layout_height="151dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="404dp"
+        android:layout_height="132dp"
+        android:layout_marginTop="36dp"
         android:background="@color/teal"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +24,7 @@
         android:id="@+id/textView2"
         android:layout_width="137dp"
         android:layout_height="32dp"
-        android:layout_marginEnd="124dp"
+        android:layout_marginEnd="136dp"
         android:gravity="center"
         android:text="User Profile"
         android:textColor="@color/white"
@@ -74,8 +73,8 @@
             android:id="@+id/profile_store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="44dp"
             android:text="Store Name"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -88,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="16dp"
             android:text="Store Code"
             android:textColor="@color/teal"
             android:textSize="16sp"
@@ -125,10 +124,18 @@
             android:id="@+id/emaillabel"
             android:layout_width="117dp"
             android:layout_height="20dp"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="116dp"
             android:text="Email Address"
             android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/to_previous_scrn"
+            android:layout_width="95dp"
+            android:layout_height="27dp"
+            android:src="@drawable/ic_bsck_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -137,7 +144,7 @@
         android:id="@+id/imageView2"
         android:layout_width="54dp"
         android:layout_height="37dp"
-        android:layout_marginStart="168dp"
+        android:layout_marginStart="176dp"
         android:layout_marginBottom="28dp"
         android:src="@drawable/ic_white_profile"
         app:layout_constraintBottom_toTopOf="@+id/textView2"

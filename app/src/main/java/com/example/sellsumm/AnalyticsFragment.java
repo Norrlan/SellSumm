@@ -29,8 +29,9 @@ public class AnalyticsFragment extends Fragment {
 
     public AnalyticsFragment() {}
 
-    // ⭐ Correct newInstance method
-    public static AnalyticsFragment newInstance(String storeId) {
+
+    public static AnalyticsFragment newInstance(String storeId)
+    {
         AnalyticsFragment fragment = new AnalyticsFragment();
         Bundle args = new Bundle();
         args.putString("storeId", storeId);
@@ -39,18 +40,19 @@ public class AnalyticsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        // ⭐ Read storeId from arguments
-        if (getArguments() != null) {
+        if (getArguments() != null)
+        {
             storeId = getArguments().getString("storeId");
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
 
         View view = inflater.inflate(R.layout.fragment_analytics, container, false);
 
@@ -68,28 +70,28 @@ public class AnalyticsFragment extends Fragment {
         return view;
     }
 
+    // method to load the kpis in the analytic fragment  for each store
     private void loadAnalytics() {
-        db.collection("stores")
-                .document(storeId)
-                .collection("staffPerformance")
-                .get()
-                .addOnSuccessListener(query -> {
-
+        db.collection("stores").document(storeId).collection("staffPerformance").get()
+                .addOnSuccessListener(query ->
+                {
                     double totalSales = 0;
                     int totalUnits = 0;
                     int totalTransactions = 0;
                     int addonCount = 0;
                     int defaultCount = 0;
 
-                    for (DocumentSnapshot doc : query.getDocuments()) {
+                    for (DocumentSnapshot doc : query.getDocuments())
+                    {
 
                         totalSales += doc.getDouble("totalSales");
                         totalUnits += doc.getLong("totalUnits");
                         totalTransactions += doc.getLong("totalTransactions");
                         addonCount += doc.getLong("transactionsWithAddons");
 
-                        // Default item = transaction without addon
-                        if (doc.getLong("transactionsWithAddons") == 0) {
+                        // define default item
+                        if (doc.getLong("transactionsWithAddons") == 0)
+                        {
                             defaultCount++;
                         }
                     }
@@ -111,7 +113,9 @@ public class AnalyticsFragment extends Fragment {
                 });
     }
 
-    private void addKPI(String title, String value, double actual, double target) {
+    //method to add new KPIs to the kpi list
+    private void addKPI(String title, String value, double actual, double target)
+    {
 
         int progress = (int) ((actual / target) * 100);
         if (progress > 100) progress = 100;
@@ -124,7 +128,8 @@ public class AnalyticsFragment extends Fragment {
         kpiList.add(new AnalyticKPIModel(title, value, progress, color));
     }
 
-    private String format(double num) {
+    private String format(double num)
+    {
         return String.format("%.2f", num);
     }
 }

@@ -1,9 +1,12 @@
 package com.example.sellsumm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,13 +40,17 @@ public class ProfileFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
+
         if (getArguments() != null)
         {
             storeId = getArguments().getString("storeId");
         }
 
         db = FirebaseFirestore.getInstance();
+
+
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -54,40 +61,58 @@ public class ProfileFragment extends Fragment
         storeNameText = view.findViewById(R.id.profile_store_name);
         storeCodeText = view.findViewById(R.id.profile_store_code);
         emailField    = view.findViewById(R.id.EmailAddressField);
+        Button logoutBtn = view.findViewById(R.id.logoutBtn);
+        Button resetPasswordBtn = view.findViewById(R.id.resetPasswordBtn);
 
-        // Set store code immediately
+        // let return user to the previous screen
+        ImageView backBtn = view.findViewById(R.id.to_previous_scrn);
+        if (backBtn != null)
+        {
+            backBtn.setOnClickListener(v -> requireActivity().onBackPressed());
+        }
+
+        logoutBtn.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+
+            // Return user to LoginScreen
+            Intent intent = new Intent(getActivity(), LoginScreen.class);
+            startActivity(intent);
+
+            requireActivity().finish(); // Prevent going back
+        });
+
+
+
+        // Set the store id as the store code
         storeCodeText.setText(storeId);
 
-        // Load store name from Firestore
         loadStoreName();
 
-        // Load email
         loadEmail();
 
         return view;
     }
 
-    private void loadStoreName() {
-        db.collection("stores")
-                .document(storeId)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
+    private void loadStoreName()  // method to display the store name that was registered
+    {
+        db.collection("stores").document(storeId).get().addOnSuccessListener(doc ->
+        {
+               if (doc.exists())
+                    {
                         String storeName = doc.getString("storeName");
                         storeNameText.setText(storeName != null ? storeName : "Unknown Store");
                     }
                 });
     }
 
-    private void loadEmail()
+    private void loadEmail()// method to load the user email from firestore
     {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        db.collection("users")
-                .document(uid)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
+        db.collection("users").document(uid).get().addOnSuccessListener(doc ->
+        {
+                    if (doc.exists())
+                    {
                         String email = doc.getString("email");
                         emailField.setText(email);
                     }

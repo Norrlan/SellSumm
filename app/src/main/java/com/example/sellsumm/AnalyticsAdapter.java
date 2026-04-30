@@ -43,14 +43,18 @@ public class AnalyticsAdapter extends RecyclerView.Adapter<AnalyticsAdapter.View
         // Set progress
         holder.progress.setProgress(kpi.progress);
 
-        // Apply dynamic color tint
+        // Apply the status colour tint
         holder.progress.setProgressTintList(ColorStateList.valueOf(kpi.color));
     }
 
+    // returns the number of KPI items in the  kpi list
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return kpiList.size();
     }
+
+    // viewholder for for displaying KPI cards in the Analytics screen
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {

@@ -1,6 +1,7 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,11 +11,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SupervisorMainActivity extends AppCompatActivity {
 
+    private static final String TAG = "SupervisorMainActivity";
+
     BottomNavigationView bottomNav;
-    public static String storeId; // accessible to all fragments
+    public static String storeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,21 +33,60 @@ public class SupervisorMainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // ⭐ Get storeId from LoginScreen
+        // get the storeId from LoginScreen
         storeId = getIntent().getStringExtra("storeId");
-
-        if (storeId == null) {
-            // fallback safety
-            storeId = "UNKNOWN";
-        }
 
         bottomNav = findViewById(R.id.supervisor_bottom_nav);
 
-        // Load default fragment WITH storeId
-        loadFragment(DashboardFragment.newInstance(storeId));
+        loadStoreIdThenSetupNav();
+    }
 
-        bottomNav.setOnItemSelectedListener(item -> {
+    private void loadStoreIdThenSetupNav() {
+        if (storeId != null && !storeId.isEmpty() && !"UNKNOWN".equals(storeId))
+        {
+            setupBottomNav();
+            loadFragment(DashboardFragment.newInstance(storeId));
+            return;
+        }
 
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            storeId = "UNKNOWN";
+            Log.e(TAG, "No logged in supervisor found");
+            setupBottomNav();
+            loadFragment(DashboardFragment.newInstance(storeId));
+            return;
+        }
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseFirestore.getInstance().collection("users").document(uid).get().addOnSuccessListener(doc ->
+                {
+                    String resolvedStoreId = doc.getString("storeId");
+                    if (resolvedStoreId != null && !resolvedStoreId.isEmpty())
+                    {
+                        storeId = resolvedStoreId;
+                    } else {
+                        storeId = "UNKNOWN";
+                        Log.e(TAG, "Supervisor storeId missing from user profile");
+                    }
+
+                    setupBottomNav();
+                    loadFragment(DashboardFragment.newInstance(storeId));
+                })
+                .addOnFailureListener(e ->
+                {
+                    storeId = "UNKNOWN";
+                    Log.e(TAG, "Failed to load supervisor storeId: " + e.getMessage());
+                    setupBottomNav();
+                    loadFragment(DashboardFragment.newInstance(storeId));
+                });
+    }
+
+        // Bottom navigation method
+    private void setupBottomNav()
+    {
+        bottomNav.setOnItemSelectedListener(item ->
+        {
             Fragment selectedFragment = null;
 
             if (item.getItemId() == R.id.nav_dashboard) {
@@ -65,22 +109,18 @@ public class SupervisorMainActivity extends AppCompatActivity {
         });
     }
 
-    private boolean loadFragment(Fragment fragment) {
+        // method to enable switches between the views in the bottom nav
+    private boolean loadFragment(Fragment fragment)
+    {
         if (fragment == null) return false;
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
 
         return true;
     }
-
-    public void openFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    // method to enable back button to return to  previous fragment
+    public void openFragment(Fragment fragment)
+    {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 }

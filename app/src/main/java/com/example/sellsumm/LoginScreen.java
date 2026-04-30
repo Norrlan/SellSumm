@@ -166,6 +166,7 @@ public class LoginScreen extends AppCompatActivity {
                     }
 
                     String role = doc.getString("role");
+                    String storeId = doc.getString("storeId");
 
                     if (role == null) {
                         Toast.makeText(this, "Role not assigned", Toast.LENGTH_SHORT).show();
@@ -173,9 +174,13 @@ public class LoginScreen extends AppCompatActivity {
                     }
 
                     if (role.equals("supervisor")) {
-                        startActivity(new Intent(this, SupervisorMainActivity.class));
+                        Intent intent = new Intent(this, SupervisorMainActivity.class);
+                        intent.putExtra("storeId", storeId);
+                        startActivity(intent);
                     } else {
-                        startActivity(new Intent(this, StaffMainActivity.class));
+                        Intent intent = new Intent(this, StaffMainActivity.class);
+                        intent.putExtra("storeId", storeId);
+                        startActivity(intent);
                     }
 
                     finish();

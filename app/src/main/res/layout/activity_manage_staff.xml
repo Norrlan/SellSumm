@@ -12,8 +12,8 @@
         android:id="@+id/title_manage_users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="16dp"
         android:text="Manage Users"
         android:textColor="@color/teal"
         android:textSize="20sp"
@@ -21,20 +21,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- ⭐ Store Code Display -->
+    <ImageView
+        android:layout_width="41dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_bsck_arrow"
+        android:id="@+id/to_dashboard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </ImageView>
+
+
     <TextView
         android:id="@+id/store_code_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Store Code:"
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_manage_users" />
 
-    <!-- will be replaced in Java -->
     <TextView
         android:id="@+id/store_code_value"
         android:layout_width="wrap_content"

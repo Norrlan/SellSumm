@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,7 @@ public class MakeSaleAdapter extends RecyclerView.Adapter<MakeSaleAdapter.ViewHo
         saleData.put("staffId", staffId);
         saleData.put("totalUnits", tx.getTotalUnits());
         saleData.put("totalAmount", tx.getTotalAmount());
+        saleData.put("totalPrice", tx.getTotalAmount());
         saleData.put("hasAddon", tx.isHasAddon());
         saleData.put("timestamp", FieldValue.serverTimestamp());
 
@@ -135,11 +137,11 @@ public class MakeSaleAdapter extends RecyclerView.Adapter<MakeSaleAdapter.ViewHo
 
         Map<String, Double> kpiValues = new HashMap<>();
         kpiValues.put("Average Transaction Value", atv);
-        kpiValues.put("Products per Transaction", upt);
+        kpiValues.put("Units per Transaction", upt);
         kpiValues.put("Units Sold", (double) totalUnits);
         kpiValues.put("Sales Figure", totalSales);
         kpiValues.put("Attachment Rate", attachmentRate);
-        kpiValues.put("Customer Engagement", (double) totalTransactions);
+        kpiValues.put("Customers Engagement", (double) totalTransactions);
 
         // Load supervisor KPIs
         db.collection("stores").document(storeId).collection("kpis").get().addOnSuccessListener(query ->
@@ -155,9 +157,16 @@ public class MakeSaleAdapter extends RecyclerView.Adapter<MakeSaleAdapter.ViewHo
                         {
 
                             double actualValue = kpiValues.get(kpiName);
+                            Map<String, Object> actualData = new HashMap<>();
+                            actualData.put("actualValue", actualValue);
 
-                            db.collection("stores").document(storeId).collection("staffPerformance").document(staffId).collection("kpis").document(kpiId)
-                                    .update("actualValue", actualValue);
+                            db.collection("stores")
+                                    .document(storeId)
+                                    .collection("staffPerformance")
+                                    .document(staffId)
+                                    .collection("kpis")
+                                    .document(kpiId)
+                                    .set(actualData, SetOptions.merge());
                         }
                     }
                 });

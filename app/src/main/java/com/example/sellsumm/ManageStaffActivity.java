@@ -2,6 +2,7 @@ package com.example.sellsumm;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class ManageStaffActivity extends AppCompatActivity
     private List<StaffModel> staffList = new ArrayList<>();
     private StaffAnalysisAdapter adapter;
 
-    private String storeId; // ⭐ store-aware
+    private String storeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,14 +48,19 @@ public class ManageStaffActivity extends AppCompatActivity
 
         db = FirebaseFirestore.getInstance();
 
-        // ⭐ Get storeId from DashboardFragment
+        //display the storeId from DashboardFragment
         storeId = getIntent().getStringExtra("storeId");
 
-        if (storeId == null) {
+        if (storeId == null)
+        {
             Toast.makeText(this, "Store ID missing", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
+
+        // Logic for the back button to take the user back to the dashboard
+        ImageView backBtn = findViewById(R.id.to_dashboard);
+        backBtn.setOnClickListener(v -> finish());
 
         RecyclerView recyclerView = findViewById(R.id.manage_staff_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,20 +75,17 @@ public class ManageStaffActivity extends AppCompatActivity
         loadStaff();
     }
 
-    // ⭐ Load staff ONLY from this store
+    // Method to load staff data for each specific store
     private void loadStaff() {
-        db.collection("stores")
-                .document(storeId)
-                .collection("staff")
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-
+        db.collection("users").whereEqualTo("role", "staff").whereEqualTo("storeId", storeId).get().addOnSuccessListener(querySnapshot ->
+                {
                     staffList.clear();
 
-                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                    for (QueryDocumentSnapshot doc : querySnapshot)
+                    {
 
                         String uid = doc.getId();
-                        String name = doc.getString("name");
+                        String name = doc.getString("fullName");
                         String email = doc.getString("email");
 
                         StaffModel staff = new StaffModel(uid, name, email, "staff");
@@ -91,46 +94,41 @@ public class ManageStaffActivity extends AppCompatActivity
 
                     adapter.notifyDataSetChanged();
 
-                    if (staffList.isEmpty()) {
+                    if (staffList.isEmpty())
+                    {
                         Toast.makeText(this, "No staff found for this store", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(e ->
+                {
                     Log.e(TAG, "Failed to load staff: " + e.getMessage());
                     Toast.makeText(this, "Failed to load staff", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    // ⭐ Delete staff from ALL correct locations
-    private void deleteStaff(String uid, int position) {
+    // Method to delete staff data from all collections
+    private void deleteStaff(String uid, int position)
+    {
 
-        if (uid == null || uid.isEmpty()) {
+        if (uid == null || uid.isEmpty())
+        {
             Toast.makeText(this, "Invalid staff ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 1️⃣ Delete from users collection
+        // delete from the users collection
         db.collection("users").document(uid).delete();
 
-        // 2️⃣ Delete from store staff list
-        db.collection("stores")
-                .document(storeId)
-                .collection("staff")
-                .document(uid)
-                .delete();
+        // delete from the stores collection and staff sub-collection
+        db.collection("stores").document(storeId).collection("staff").document(uid).delete();
 
-        // 3️⃣ Delete staff performance
-        db.collection("stores")
-                .document(storeId)
-                .collection("staffPerformance")
-                .document(uid)
-                .delete();
+        // Delete staff performance
+        db.collection("stores").document(storeId).collection("staffPerformance").document(uid).delete();
 
-        // Update UI
         staffList.remove(position);
         adapter.notifyItemRemoved(position);
         adapter.notifyItemRangeChanged(position, staffList.size());
-
+        // display in the UI
         Toast.makeText(this, "Staff removed", Toast.LENGTH_SHORT).show();
     }
 }

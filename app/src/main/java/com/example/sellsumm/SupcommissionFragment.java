@@ -24,6 +24,7 @@ public class SupcommissionFragment extends Fragment
     private static final String TAG = "SupcommissionFragment";
 
     private FirebaseFirestore db;
+    private String storeId;
 
     private TextView currentRateDisplay;
     private EditText inputRate;
@@ -37,6 +38,7 @@ public class SupcommissionFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_supcommission, container, false);
 
         db = FirebaseFirestore.getInstance();
+        storeId = SupervisorMainActivity.storeId;
 
         currentRateDisplay = view.findViewById(R.id.textView5);
         inputRate          = view.findViewById(R.id.editTextNumberDecimal);
@@ -51,7 +53,13 @@ public class SupcommissionFragment extends Fragment
 
     //Read current rate from Firestore and display it
     private void loadCurrentRate() {
-        db.collection("commissionSettings").document("default").get().addOnSuccessListener(doc ->
+        if (storeId == null || storeId.isEmpty() || "UNKNOWN".equals(storeId)) {
+            currentRateDisplay.setText("0%");
+            Log.e(TAG, "Store ID missing for commission settings");
+            return;
+        }
+
+        db.collection("commissionSettings").document(storeId).get().addOnSuccessListener(doc ->
                 {
                     if (doc.exists() && doc.getDouble("rate") != null)
                     {
@@ -98,7 +106,12 @@ public class SupcommissionFragment extends Fragment
         Map<String, Object> data = new HashMap<>();
         data.put("rate", rate);
 
-        db.collection("commissionSettings").document("default").set(data).addOnSuccessListener(aVoid ->
+        if (storeId == null || storeId.isEmpty() || "UNKNOWN".equals(storeId)) {
+            Toast.makeText(requireContext(), "Store ID missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("commissionSettings").document(storeId).set(data).addOnSuccessListener(aVoid ->
              {
                     currentRateDisplay.setText(String.format("%.1f%%", rate));
 

@@ -43,6 +43,7 @@ public class CreatedKPIAdapter extends RecyclerView.Adapter<CreatedKPIAdapter.Vi
         return new ViewHolder(view);
     }
 
+    //bindViewHolder to store KPI data and click actions to each card
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
@@ -68,6 +69,7 @@ public class CreatedKPIAdapter extends RecyclerView.Adapter<CreatedKPIAdapter.Vi
         return kpis != null ? kpis.size() : 0;
     }
 
+    // for displaying the KPI cards with name,description and delete button on the KPIs screen
     static class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView  kpiName, kpiDescription;

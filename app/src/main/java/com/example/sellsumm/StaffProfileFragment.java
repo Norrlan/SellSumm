@@ -1,47 +1,38 @@
 package com.example.sellsumm;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StaffProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class StaffProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "StaffProfileFragment";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String storeId;
+    private String staffId;
 
-    public StaffProfileFragment() {
-        // Required empty public constructor
-    }
+    private FirebaseFirestore db;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StaffProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StaffProfileFragment newInstance(String param1, String param2) {
+    private TextView fullNameText, emailText, storeNameText, storeCodeText, roleText;
+
+    public StaffProfileFragment() {}
+
+    // ⭐ Required for StaffMainActivity
+    public static StaffProfileFragment newInstance(String storeId) {
         StaffProfileFragment fragment = new StaffProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("storeId", storeId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,16 +40,85 @@ public class StaffProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            storeId = getArguments().getString("storeId");
         }
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        staffId = currentUser != null ? currentUser.getUid() : null;
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_staff_profile, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_staff_profile, container, false);
+
+        fullNameText = view.findViewById(R.id.profileFullName);
+        emailText = view.findViewById(R.id.profileEmail);
+        storeNameText = view.findViewById(R.id.profileStoreName);
+        storeCodeText = view.findViewById(R.id.profileStoreCode);
+        roleText = view.findViewById(R.id.profileRole);
+
+        loadStaffInfo();
+        loadStoreInfo();
+
+        return view;
+        /*fullNameText = view.findViewById(R.id.profileFullName);
+                                             ^
+  symbol:   variable profileFullName
+  location: class id*/
+    }
+
+    // ⭐ Load staff personal info
+    private void loadStaffInfo() {
+        if (staffId == null) {
+            Log.e(TAG, "No logged in staff user found");
+            return;
+        }
+
+        db.collection("users")
+                .document(staffId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        String fullName = doc.getString("fullName");
+                        String email = doc.getString("email");
+
+                        fullNameText.setText(fullName != null ? fullName : "N/A");
+                        emailText.setText(email != null ? email : "N/A");
+                        roleText.setText("Staff");
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to load staff info: " + e.getMessage()));
+    }
+
+    // ⭐ Load store info
+    private void loadStoreInfo() {
+        if (storeId == null || storeId.isEmpty()) {
+            Log.e(TAG, "storeId missing - cannot load store info");
+            storeNameText.setText("N/A");
+            storeCodeText.setText("N/A");
+            return;
+        }
+
+        db.collection("stores")
+                .document(storeId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        String storeName = doc.getString("storeName");
+                        String storeCode = doc.getId(); // document ID is the store code
+
+                        storeNameText.setText(storeName != null ? storeName : "N/A");
+                        storeCodeText.setText(storeCode != null ? storeCode : "N/A");
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Failed to load store info: " + e.getMessage()));
     }
 }
