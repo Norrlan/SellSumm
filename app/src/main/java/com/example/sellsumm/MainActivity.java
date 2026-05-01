@@ -29,18 +29,7 @@ public class MainActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        /**
-         *
-         * private void logout() {
-         *     FirebaseAuth.getInstance().signOut();
-         *     Intent intent = new Intent(this, LoginScreen.class);
-         *     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-         *     startActivity(intent);
-         *     finish();
-         * }
-         * logout();
-         *
-         */
+
 
 
     }

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Top bar -->
+
         <LinearLayout
             android:id="@+id/top_bar"
             android:layout_width="0dp"
@@ -39,7 +39,7 @@
                 android:textColor="@color/teal" />
         </LinearLayout>
 
-        <!-- Optional subtitle -->
+
         <TextView
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
@@ -52,7 +52,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp" />
 
-        <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/templates_recycler"
             android:layout_width="0dp"

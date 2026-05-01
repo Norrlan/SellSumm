@@ -15,7 +15,8 @@ public class StaffTransactionAdapter extends RecyclerView.Adapter<StaffTransacti
 
     private List<TransactionModel> list;
 
-    public StaffTransactionAdapter(List<TransactionModel> list) {
+    public StaffTransactionAdapter(List<TransactionModel> list)
+    {
         this.list = list;
     }
 

@@ -28,7 +28,7 @@ public class DashboardFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // ⭐ Correct newInstance method
+    // Correct newInstance method
     public static DashboardFragment newInstance(String storeId) {
         DashboardFragment fragment = new DashboardFragment();
         Bundle args = new Bundle();
@@ -41,7 +41,7 @@ public class DashboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ⭐ Read storeId passed from SupervisorMainActivity
+        // Read storeId passed from SupervisorMainActivity
         if (getArguments() != null) {
             storeId = getArguments().getString("storeId");
         }
@@ -62,12 +62,11 @@ public class DashboardFragment extends Fragment {
                     .commit();
         });
 
-        // Navigate to Manage Staff screen
+        // Navigate to Manage Staff screen and pass the store id into it
         LinearLayout manageStaffTab = view.findViewById(R.id.staff_member_tab);
         manageStaffTab.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), ManageStaffActivity.class);
-            intent.putExtra("storeId", storeId); // ⭐ pass storeId
-            startActivity(intent);
+            intent.putExtra("storeId", storeId);
         });
 
         salesFigureValue = view.findViewById(R.id.text_sales_figure_value);

@@ -113,6 +113,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/to_dashboard2"
+        android:layout_width="41dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/ic_bsck_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </ImageView>
+
     <TextView
             android:id="@+id/intro_label"
             android:layout_width="wrap_content"

@@ -33,12 +33,12 @@ public class InventoryFragment extends Fragment {
     private TextView emptyStateText;
     private RecyclerView recyclerView;
 
-    private String storeId; // ⭐ store-aware
+    private String storeId;
 
     public InventoryFragment() {}
 
-    // ⭐ Correct newInstance() for InventoryFragment
-    public static InventoryFragment newInstance(String storeId) {
+    public static InventoryFragment newInstance(String storeId)
+    {
         InventoryFragment fragment = new InventoryFragment();
         Bundle args = new Bundle();
         args.putString("storeId", storeId);
@@ -50,14 +50,14 @@ public class InventoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ⭐ Read storeId from arguments
         if (getArguments() != null) {
             storeId = getArguments().getString("storeId");
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_inventory, container, false);
 
         db = FirebaseFirestore.getInstance();
@@ -68,24 +68,21 @@ public class InventoryFragment extends Fragment {
         TextInputEditText searchBar = view.findViewById(R.id.Search_bar);
 
         adapter = new ProductInventoryAdapter(
-                productList,
-                product -> openProductDialog(product),
-                product -> deleteProduct(product)
+                productList, product -> openProductDialog(product), product -> deleteProduct(product)
         );
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        // Search bar
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
                 adapter.filter(s.toString());
             }
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        // Add button
         btnAdd.setOnClickListener(v -> openProductDialog(null));
 
         loadProducts();
@@ -93,16 +90,14 @@ public class InventoryFragment extends Fragment {
         return view;
     }
 
-    // ⭐ Load products from THIS store only
+    // Load the products from the store collection in Firestore
     private void loadProducts() {
-        db.collection("stores")
-                .document(storeId)
-                .collection("products")
-                .get()
+        db.collection("stores").document(storeId).collection("products").get()
                 .addOnSuccessListener(querySnapshot -> {
                     productList.clear();
 
-                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                    for (QueryDocumentSnapshot doc : querySnapshot)
+                    {
 
                         String id = doc.getString("productId");
                         double price = doc.getDouble("price") != null ? doc.getDouble("price") : 0;
@@ -131,14 +126,14 @@ public class InventoryFragment extends Fragment {
                         Log.e(TAG, "Failed to load products: " + e.getMessage()));
     }
 
-    // ⭐ Open dialog for add or edit
-    private void openProductDialog(ProductModel existingProduct) {
-        ProductConfigDialog dialog =
-                existingProduct == null ?
-                        ProductConfigDialog.newInstanceForAdd(storeId) : // Expected no arguments but found 1
-                        ProductConfigDialog.newInstanceForEdit(existingProduct, storeId); // Expected 1 argument but found 2
+    //Method to open product dialog when creating the product
+    private void openProductDialog(ProductModel existingProduct)
+    {
+        ProductConfigDialog dialog = existingProduct == null ? ProductConfigDialog.newInstanceForAdd(storeId) :
+                ProductConfigDialog.newInstanceForEdit(existingProduct, storeId);
 
-        dialog.setProductSaveListener(savedProduct -> {
+        dialog.setProductSaveListener(savedProduct ->
+        {
 
             boolean isEdit = false;
             for (int i = 0; i < productList.size(); i++) {
@@ -160,13 +155,10 @@ public class InventoryFragment extends Fragment {
         dialog.show(getChildFragmentManager(), "ProductConfigDialog");
     }
 
-    // ⭐ Delete product from THIS store only
-    private void deleteProduct(ProductModel product) {
-        db.collection("stores")
-                .document(storeId)
-                .collection("products")
-                .document(product.getProductId())
-                .delete()
+    //method to delete product
+    private void deleteProduct(ProductModel product)
+    {
+        db.collection("stores").document(storeId).collection("products").document(product.getProductId()).delete()
                 .addOnSuccessListener(aVoid -> {
                     productList.remove(product);
                     adapter.updateList(productList);
@@ -177,7 +169,8 @@ public class InventoryFragment extends Fragment {
                         Log.e(TAG, "Delete failed: " + e.getMessage()));
     }
 
-    private void updateEmptyState() {
+    private void updateEmptyState()
+    {
         if (productList.isEmpty()) {
             emptyStateText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);

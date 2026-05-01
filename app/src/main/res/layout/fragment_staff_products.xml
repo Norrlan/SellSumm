@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Top bar -->
+
         <LinearLayout
             android:id="@+id/sales_top_bar"
             android:layout_width="0dp"
@@ -39,9 +39,6 @@
                 android:textColor="@color/teal" />
         </LinearLayout>
 
-        <!-- Optional subtitle -->
-
-        <!-- RecyclerView -->
 
         <TextView
             android:id="@+id/subtitle"

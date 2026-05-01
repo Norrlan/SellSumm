@@ -8,7 +8,7 @@
     android:background="@color/screen_background"
     tools:context=".LoginScreen">
 
-    <!-- Header image -->
+
     <ImageView
         android:id="@+id/headerImage"
         android:layout_width="0dp"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Logo -->
+
     <ImageView
         android:id="@+id/logo"
         android:layout_width="80dp"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.15" />
 
-    <!-- App name -->
+
     <TextView
         android:id="@+id/appName"
         android:layout_width="wrap_content"
@@ -45,7 +45,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp" />
 
-    <!-- Tagline -->
     <TextView
         android:id="@+id/tagline"
         android:layout_width="wrap_content"
@@ -58,19 +57,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="4dp" />
 
-    <!-- Form container -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/formContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@drawable/white_bg_field"
         android:padding="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         app:layout_constraintTop_toBottomOf="@id/headerImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp">
 
-        <!-- EMAIL -->
+
         <TextView
             android:id="@+id/emailLabel"
             android:layout_width="wrap_content"
@@ -95,7 +96,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- PASSWORD -->
         <TextView
             android:id="@+id/passwordLabel"
             android:layout_width="wrap_content"
@@ -121,7 +121,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- STORE CODE (only used for staff login) -->
         <TextView
             android:id="@+id/storeCodeLabel"
             android:layout_width="wrap_content"
@@ -147,7 +146,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- ROLE -->
         <TextView
             android:id="@+id/roleLabel"
             android:layout_width="wrap_content"
@@ -170,7 +168,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Sign In button -->
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
@@ -183,7 +180,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Create Account -->
     <TextView
         android:id="@+id/Registerlink"
         android:layout_width="wrap_content"
@@ -195,7 +191,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Forgotten password -->
+
     <TextView
         android:id="@+id/forgotten_Pwd"
         android:layout_width="wrap_content"

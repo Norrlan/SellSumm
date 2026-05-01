@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:paddingBottom="80dp">
 
-        <!-- App name -->
         <TextView
             android:id="@+id/appNameText"
             android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Welcome message -->
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
@@ -36,7 +34,6 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- 2x2 KPI summary cards -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +44,6 @@
             android:rowCount="2"
             android:useDefaultMargins="true">
 
-            <!-- Target Sales -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="80dp"
@@ -74,7 +70,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Sales Figure -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="80dp"
@@ -101,7 +96,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- ATV -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="80dp"
@@ -128,7 +123,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Commission -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="80dp"
@@ -195,7 +190,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Column headers -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -229,7 +223,7 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
-            <!-- Column values -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -386,7 +380,7 @@
                     android:id="@+id/commissionValue"
                     android:layout_width="172dp"
                     android:layout_height="wrap_content"
-                    android:text="Amount (£): "
+                    android:text=" Commission (£): "
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 

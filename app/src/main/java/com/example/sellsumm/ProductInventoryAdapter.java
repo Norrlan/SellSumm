@@ -41,8 +41,8 @@ public class ProductInventoryAdapter extends
 
     @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(
-            @NonNull ViewGroup parent, int viewType) {
+    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.created_product_row, parent, false);
         return new ProductViewHolder(view);

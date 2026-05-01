@@ -49,7 +49,8 @@ public class StaffTransactionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
+        if (getArguments() != null)
+        {
             storeId = getArguments().getString("storeId");
         }
 
@@ -61,9 +62,7 @@ public class StaffTransactionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_staff_transaction, container, false);
 
@@ -91,13 +90,9 @@ public class StaffTransactionFragment extends Fragment {
         }
     }
 
-    // ⭐ Load ONLY this staff member’s transactions
+    // Load a single staff member’s transactions
     private void loadTransactions() {
-        db.collection("stores")
-                .document(storeId)
-                .collection("transactions")
-                .whereEqualTo("staffId", staffId)
-                .get()
+        db.collection("stores").document(storeId).collection("transactions").whereEqualTo("staffId", staffId).get()
                 .addOnSuccessListener(query -> {
                     transactionList.clear();
 

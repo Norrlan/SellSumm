@@ -28,10 +28,10 @@ public class ProductConfigDialog extends DialogFragment {
 
     private ProductSaveListener listener;
     private ProductModel existingProduct;
-    private String storeId;   // ⭐ NEW
+    private String storeId;
 
-    // ⭐ ADD MODE
-    public static ProductConfigDialog newInstanceForAdd(String storeId) {
+    public static ProductConfigDialog newInstanceForAdd(String storeId)
+    {
         ProductConfigDialog dialog = new ProductConfigDialog();
         Bundle args = new Bundle();
         args.putString("storeId", storeId);
@@ -39,7 +39,7 @@ public class ProductConfigDialog extends DialogFragment {
         return dialog;
     }
 
-    // ⭐ EDIT MODE
+    // For editng the product on dialog
     public static ProductConfigDialog newInstanceForEdit(ProductModel product, String storeId) {
         ProductConfigDialog dialog = new ProductConfigDialog();
         Bundle args = new Bundle();
@@ -53,6 +53,7 @@ public class ProductConfigDialog extends DialogFragment {
         return dialog;
     }
 
+    // save the edited product
     public void setProductSaveListener(ProductSaveListener listener) {
         this.listener = listener;
     }
@@ -64,7 +65,7 @@ public class ProductConfigDialog extends DialogFragment {
 
         if (getArguments() != null) {
 
-            storeId = getArguments().getString("storeId");  // ⭐ READ storeId
+            storeId = getArguments().getString("storeId");
 
             String id       = getArguments().getString("product_id");
             String priceStr = getArguments().getString("price", "0");
@@ -106,13 +107,13 @@ public class ProductConfigDialog extends DialogFragment {
         Spinner   spinnerType   = view.findViewById(R.id.spinner3);
         Button    btnSave       = view.findViewById(R.id.saveProductButton);
 
-        // Spinner setup
+        // Dropdown logic for the default and add-on product types
         String[] productTypes = {"Default", "Add-on"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, productTypes);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(spinnerAdapter);
 
-        // Pre-fill if editing
+
         if (existingProduct != null) {
             inputPrice.setText(String.valueOf(existingProduct.getPrice()));
             inputName.setText(existingProduct.getProductName());
@@ -122,6 +123,8 @@ public class ProductConfigDialog extends DialogFragment {
         }
 
         btnClose.setOnClickListener(v -> dismiss());
+
+        //onclicklistener saves the product details to the product firestore collection
 
         btnSave.setOnClickListener(v -> {
 
@@ -164,8 +167,9 @@ public class ProductConfigDialog extends DialogFragment {
         }
     }
 
-    // ⭐ Save product under THIS store only
-    private void saveToFirestore(ProductModel product) {
+    // Method to save each product to its specific store in firestore
+    private void saveToFirestore(ProductModel product)
+    {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -177,12 +181,8 @@ public class ProductConfigDialog extends DialogFragment {
         data.put("productType", product.getProductType());
         data.put("isAddon", product.isAddon());
 
-        db.collection("stores")
-                .document(storeId)
-                .collection("products")
-                .document(product.getProductId())
-                .set(data)
-                .addOnSuccessListener(aVoid ->
+        db.collection("stores").document(storeId).collection("products").document(product.getProductId()).set(data)
+             .addOnSuccessListener(aVoid ->
                         android.util.Log.d("ProductConfig", "Product saved: " + product.getProductName()))
                 .addOnFailureListener(e ->
                         android.util.Log.e("ProductConfig", "Save failed: " + e.getMessage()));

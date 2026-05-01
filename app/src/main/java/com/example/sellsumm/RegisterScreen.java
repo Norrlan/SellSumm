@@ -52,12 +52,12 @@ public class RegisterScreen extends AppCompatActivity {
         passwordField  = findViewById(R.id.PwdField);
         storeNameField = findViewById(R.id.storeNameField);
         storeNameLabel = findViewById(R.id.storeNameLabel);
-
-        roleSpinner = findViewById(R.id.spinner);
+        roleSpinner = findViewById(R.id.spinner3);
         signUpBtn   = findViewById(R.id.sign_Up);
         loginLink   = findViewById(R.id.loginlink);
 
         // Role spinner: supervisor / staff
+        /**/
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.spinner_text,

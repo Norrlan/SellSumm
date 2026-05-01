@@ -160,11 +160,7 @@ public class MakeSaleAdapter extends RecyclerView.Adapter<MakeSaleAdapter.ViewHo
                             Map<String, Object> actualData = new HashMap<>();
                             actualData.put("actualValue", actualValue);
 
-                            db.collection("stores")
-                                    .document(storeId)
-                                    .collection("staffPerformance")
-                                    .document(staffId)
-                                    .collection("kpis")
+                            db.collection("stores").document(storeId).collection("staffPerformance").document(staffId).collection("kpis")
                                     .document(kpiId)
                                     .set(actualData, SetOptions.merge());
                         }

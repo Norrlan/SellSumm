@@ -39,7 +39,7 @@
         android:id="@+id/profileCard"
         android:layout_width="278dp"
         android:layout_height="444dp"
-        android:background="@color/white"
+        android:background="@drawable/white_bg_field"
         android:padding="24dp"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"

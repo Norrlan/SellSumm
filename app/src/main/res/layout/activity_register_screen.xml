@@ -8,7 +8,6 @@
     android:background="@color/screen_background"
     tools:context=".RegisterScreen">
 
-    <!-- Header image -->
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="0dp"
@@ -19,7 +18,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/store_background" />
 
-    <!-- Logo -->
     <ImageView
         android:id="@+id/imageView8"
         android:layout_width="80dp"
@@ -31,7 +29,6 @@
         app:layout_constraintVertical_bias="0.16"
         app:srcCompat="@drawable/sellsumm_logo" />
 
-    <!-- App name -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -45,7 +42,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Tagline -->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -58,27 +54,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Form container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/formContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="367dp"
+        android:layout_height="389dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/white_bg_field"
         android:padding="20dp"
-        android:background="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/textView2">
 
-        <!-- EMAIL -->
         <TextView
             android:id="@+id/emailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="EMAIL"
             android:textColor="@color/black"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/emailField"
@@ -86,16 +83,15 @@
             android:layout_height="40dp"
             android:background="@drawable/bg_input_field"
             android:hint="Enter your email address"
+            android:inputType="textEmailAddress"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:inputType="textEmailAddress"
-            app:layout_constraintTop_toBottomOf="@id/emailLabel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/emailLabel" />
 
-        <!-- FULL NAME -->
         <TextView
             android:id="@+id/fullNameLabel"
             android:layout_width="wrap_content"
@@ -103,8 +99,8 @@
             android:layout_marginTop="16dp"
             android:text="FULL NAME"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/emailField"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailField" />
 
         <EditText
             android:id="@+id/fullnameField"
@@ -116,11 +112,11 @@
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/fullNameLabel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/fullNameLabel" />
 
-        <!-- PASSWORD -->
+
         <TextView
             android:id="@+id/passwordLabel"
             android:layout_width="wrap_content"
@@ -128,8 +124,8 @@
             android:layout_marginTop="16dp"
             android:text="PASSWORD"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/fullnameField"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fullnameField" />
 
         <EditText
             android:id="@+id/PwdField"
@@ -142,11 +138,10 @@
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/passwordLabel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/passwordLabel" />
 
-        <!-- STORE NAME / STORE CODE (same field, role-dependent) -->
         <TextView
             android:id="@+id/storeNameLabel"
             android:layout_width="wrap_content"
@@ -154,8 +149,8 @@
             android:layout_marginTop="16dp"
             android:text="STORE NAME"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/PwdField"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/PwdField" />
 
         <EditText
             android:id="@+id/storeNameField"
@@ -169,58 +164,41 @@
             android:paddingEnd="14dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/storeNameLabel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- ROLE -->
-        <TextView
-            android:id="@+id/roleLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="ROLE"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/storeNameField"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/storeNameLabel" />
 
         <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="0dp"
+            android:id="@+id/spinner3"
+            android:layout_width="323dp"
             android:layout_height="48dp"
-            android:layout_marginTop="8dp"
             android:background="#e0e0e0"
-            app:layout_constraintTop_toBottomOf="@id/roleLabel"
+            android:layout_marginTop="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/storeNameField"
+            app:layout_constraintVertical_bias="1.0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Bottom row -->
     <LinearLayout
         android:id="@+id/bottomRow"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
-        android:orientation="horizontal"
+        android:layout_width="388dp"
+        android:layout_height="101dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/haveAcca"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="Have an account?"
-            android:textColor="@color/black" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/sign_Up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="135dp"
             android:backgroundTint="@color/teal"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -229,12 +207,15 @@
 
         <TextView
             android:id="@+id/loginlink"
-            android:layout_width="0dp"
+            android:layout_width="101dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="135dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="Login"
             android:textColor="@color/teal" />
+
 
     </LinearLayout>
 
